@@ -10,6 +10,7 @@ function Login() {
     const [side_box, setSide_box] = useState("#141414");
     const [app_back, setApp_back] = useState(["#1b1b1b", "#141414"]);
     const [blending, setBlending] = useState([50, 50]);
+    const [back_rotate, setBack_rotate] = useState(90);
 
     return (
         <div className="login">
@@ -17,7 +18,7 @@ function Login() {
                 <div
                     className="background-style tooltip-2"
                     style={{
-                        background: `linear-gradient(to right, ${app_back[0]} ${blending[0]}%, ${app_back[1]} ${blending[1]}%)`,
+                        background: `linear-gradient(${back_rotate}deg, ${app_back[0]} ${blending[0]}%, ${app_back[1]} ${blending[1]}%)`,
                     }}
                 >
                     <span className="tooltiptext p-2">
@@ -54,13 +55,29 @@ function Login() {
                         <span>Background Blending</span>
                         <RangeSlider
                             name="Left"
-                            setBlending={setBlending}
-                            blending={blending}
+                            min="0"
+                            max="100"
+                            onChange={(e) =>
+                                setBlending([e.target.value, blending[1]])
+                            }
+                            slider={blending[0]}
                         />
                         <RangeSlider
                             name="Right"
-                            setBlending={setBlending}
-                            blending={blending}
+                            min="0"
+                            max="100"
+                            onChange={(e) =>
+                                setBlending([blending[0], e.target.value])
+                            }
+                            slider={blending[1]}
+                        />
+                        <span>Background Rotate</span>
+                        <RangeSlider
+                            name="Degree"
+                            min="0"
+                            max="180"
+                            onChange={(e) => setBack_rotate(e.target.value)}
+                            slider={back_rotate}
                         />
                     </span>
                 </div>
