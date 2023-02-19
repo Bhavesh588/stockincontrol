@@ -3,9 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import "./Login.scss";
 import RangeSlider from "../../Components/RangeSlider/RangeSlider";
+import ColorPicker from "../../Components/ColorPicker/ColorPicker";
 
 function Login() {
-    const [all_colors] = useState(["#ED7B2D", "#ffffff", "#1b1b1b", "#141414"]);
     const [login_box, setLogin_box] = useState("#ffffff");
     const [side_box, setSide_box] = useState("#141414");
     const [app_back, setApp_back] = useState(["#1b1b1b", "#141414"]);
@@ -23,35 +23,17 @@ function Login() {
                 >
                     <span className="tooltiptext p-2">
                         <span>Layer Left</span>
-                        <div className="d-flex">
-                            {all_colors.map((color, i) => (
-                                <div
-                                    key={i}
-                                    onClick={() =>
-                                        setApp_back([color, app_back[1]])
-                                    }
-                                    className="color-box"
-                                    style={{
-                                        backgroundColor: `${color}`,
-                                    }}
-                                ></div>
-                            ))}
-                        </div>
+                        <ColorPicker
+                            onClick={(color) =>
+                                setApp_back([color, app_back[1]])
+                            }
+                        />
                         <span>Layer Right</span>
-                        <div className="d-flex">
-                            {all_colors.map((color, i) => (
-                                <div
-                                    key={i}
-                                    onClick={() =>
-                                        setApp_back([app_back[0], color])
-                                    }
-                                    className="color-box"
-                                    style={{
-                                        backgroundColor: `${color}`,
-                                    }}
-                                ></div>
-                            ))}
-                        </div>
+                        <ColorPicker
+                            onClick={(color) =>
+                                setApp_back([app_back[0], color])
+                            }
+                        />
                         <span>Background Blending</span>
                         <RangeSlider
                             name="Left"
@@ -89,16 +71,9 @@ function Login() {
                         <div className="row">
                             <div className="col tooltip-2">
                                 <span className="tooltiptext d-flex p-2">
-                                    {all_colors.map((color, i) => (
-                                        <div
-                                            key={i}
-                                            onClick={() => setSide_box(color)}
-                                            className="color-box"
-                                            style={{
-                                                backgroundColor: `${color}`,
-                                            }}
-                                        ></div>
-                                    ))}
+                                    <ColorPicker
+                                        onClick={(color) => setSide_box(color)}
+                                    />
                                 </span>
                                 <div className="t_over"></div>
                                 <div className="t_over"></div>
@@ -131,16 +106,9 @@ function Login() {
                                 style={{ backgroundColor: `${login_box}` }}
                             >
                                 <span className="tooltiptext d-flex p-2">
-                                    {all_colors.map((color, i) => (
-                                        <div
-                                            key={i}
-                                            onClick={() => setLogin_box(color)}
-                                            className="color-box"
-                                            style={{
-                                                backgroundColor: `${color}`,
-                                            }}
-                                        ></div>
-                                    ))}
+                                    <ColorPicker
+                                        onClick={(color) => setLogin_box(color)}
+                                    />
                                 </span>
                                 <h2>Login</h2>
                                 <div className="btn-all facebook-btn d-flex align-items-center">
