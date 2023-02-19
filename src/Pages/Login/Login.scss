@@ -115,7 +115,7 @@
 .tooltip-2 {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
+    border-bottom: 1px dotted gray;
 }
 
 .tooltip-2 {
@@ -124,7 +124,7 @@
         visibility: hidden;
         opacity: 0;
         // width: 120px;
-        background-color: black;
+        background-color: rgb(58, 58, 58);
         color: #fff;
         text-align: center;
         border-radius: 6px;

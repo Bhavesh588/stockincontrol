@@ -7,6 +7,7 @@ import ColorPicker from "../../Components/ColorPicker/ColorPicker";
 
 function Login() {
     const [login_box, setLogin_box] = useState("#ffffff");
+    const [login_txt, setLogin_txt] = useState("#000000");
     const [side_box, setSide_box] = useState("#141414");
     const [app_back, setApp_back] = useState(["#1b1b1b", "#141414"]);
     const [blending, setBlending] = useState([50, 50]);
@@ -70,10 +71,15 @@ function Login() {
                     <div className="container h-100 d-flex align-items-center justify-content-center">
                         <div className="row">
                             <div className="col tooltip-2">
-                                <span className="tooltiptext d-flex p-2">
-                                    <ColorPicker
-                                        onClick={(color) => setSide_box(color)}
-                                    />
+                                <span className="tooltiptext d-flex flex-column p-2">
+                                    <span>Background Color</span>
+                                    <div className="my-1">
+                                        <ColorPicker
+                                            onClick={(color) =>
+                                                setSide_box(color)
+                                            }
+                                        />
+                                    </div>
                                 </span>
                                 <div className="t_over"></div>
                                 <div className="t_over"></div>
@@ -103,12 +109,28 @@ function Login() {
                             </div>
                             <div
                                 className="col d-flex flex-column justify-content-center align-items-center tooltip-2"
-                                style={{ backgroundColor: `${login_box}` }}
+                                style={{
+                                    backgroundColor: `${login_box}`,
+                                    color: `${login_txt}`,
+                                }}
                             >
-                                <span className="tooltiptext d-flex p-2">
-                                    <ColorPicker
-                                        onClick={(color) => setLogin_box(color)}
-                                    />
+                                <span className="tooltiptext d-flex flex-column p-2">
+                                    <span>Background Color</span>
+                                    <div className="my-1">
+                                        <ColorPicker
+                                            onClick={(color) =>
+                                                setLogin_box(color)
+                                            }
+                                        />
+                                    </div>
+                                    <span>Text Color</span>
+                                    <div className="my-1">
+                                        <ColorPicker
+                                            onClick={(color) =>
+                                                setLogin_txt(color)
+                                            }
+                                        />
+                                    </div>
                                 </span>
                                 <h2>Login</h2>
                                 <div className="btn-all facebook-btn d-flex align-items-center">

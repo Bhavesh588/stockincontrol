@@ -3,7 +3,14 @@ import React, { useState } from "react";
 import "./ColorPicker.scss";
 
 function ColorPicker({ onClick }) {
-    const [all_colors] = useState(["#ED7B2D", "#ffffff", "#1b1b1b", "#141414"]);
+    const [all_colors] = useState([
+        "#E15755",
+        "#1E102D",
+        "#ffffff",
+        "#1b1b1b",
+        "#141414",
+        "#000000",
+    ]);
 
     return (
         <div className="colorpicker">
