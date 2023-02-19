@@ -15,7 +15,7 @@ function RangeSlider({ name, min, max, onChange, slider }) {
                     min={min}
                     max={max}
                     defaultValue={slider}
-                    className="slider"
+                    // className="slider"
                     id="myRange"
                     onChange={onChange}
                 />
