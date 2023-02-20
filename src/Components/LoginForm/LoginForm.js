@@ -109,14 +109,14 @@ function LoginForm({ login_txt, login_box, setAccount }) {
                         backgroundColor: `${login_txt}`,
                     }}
                 />
-                <span
+                <div
                     className="or_text"
                     style={{
                         backgroundColor: `${login_box}`,
                     }}
                 >
                     OR
-                </span>
+                </div>
             </div>
             <div className="btn-all facebook-btn d-flex align-items-center">
                 <FontAwesomeIcon

@@ -143,6 +143,7 @@ function Login() {
                                 ) : account === "login" ? (
                                     <LoginForm
                                         login_txt={login_txt}
+                                        login_box={login_box}
                                         setAccount={setAccount}
                                     />
                                 ) : (
