@@ -1,9 +1,17 @@
+import React, { useState } from "react";
 import { Field, Form, Formik } from "formik";
-import React from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 import "./SignupForm.scss";
 
 function SignupForm({ login_txt, setAccount }) {
+    const { login } = useAuth();
+    const [main_err, setMain_err] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const navigate = useNavigate();
+
     const validate = (values) => {
         const errors = {};
 
@@ -25,9 +33,18 @@ function SignupForm({ login_txt, setAccount }) {
         confirmPassword: "",
     };
 
-    const onSubmit = (values, { resetForm }) => {
-        alert(JSON.stringify(values, null, 2));
-        resetForm();
+    const onSubmit = async (values, { resetForm }) => {
+        // alert(JSON.stringify(values, null, 2));
+        try {
+            setMain_err("");
+            setLoading(true);
+            await login(values.email, values.password);
+            resetForm();
+            navigate("/");
+        } catch (error) {
+            setMain_err("Failed to create your account");
+        }
+        setLoading(false);
     };
 
     return (
@@ -42,6 +59,11 @@ function SignupForm({ login_txt, setAccount }) {
                     <Form className="w-100 d-flex flex-column justify-content-center align-items-center">
                         <h2>Sign Up</h2>
                         <div className="inputbox d-flex flex-column">
+                            {main_err === "" ? null : (
+                                <div className="bg-danger">
+                                    <strong>{main_err}</strong>
+                                </div>
+                            )}
                             <Field
                                 type="text"
                                 placeholder="Email"
@@ -92,6 +114,7 @@ function SignupForm({ login_txt, setAccount }) {
                         <button
                             type="submit"
                             className="login_btn"
+                            disabled={loading}
                             style={{
                                 color: `${login_txt}`,
                                 borderColor: `${login_txt}`,

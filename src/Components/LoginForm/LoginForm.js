@@ -1,10 +1,18 @@
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Field, Form, Formik } from "formik";
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./LoginForm.scss";
+import { useAuth } from "../../contexts/AuthContext";
 
 function LoginForm({ login_txt, login_box, setAccount }) {
+    const { signup } = useAuth();
+    const [loading, setLoading] = useState(false);
+    const [main_err, setMain_err] = useState("");
+
+    const navigate = useNavigate();
+
     const validate = (values) => {
         const errors = {};
 
@@ -22,9 +30,17 @@ function LoginForm({ login_txt, login_box, setAccount }) {
         password: "",
     };
 
-    const onSubmit = (values, { resetForm }) => {
-        alert(JSON.stringify(values, null, 2));
-        resetForm();
+    const onSubmit = async (values, { resetForm }) => {
+        try {
+            setMain_err("");
+            setLoading(true);
+            await signup(values.email, values.password);
+            resetForm();
+            navigate("/");
+        } catch (error) {
+            setMain_err("Failed to sign in");
+        }
+        setLoading(false);
     };
 
     return (
@@ -39,6 +55,11 @@ function LoginForm({ login_txt, login_box, setAccount }) {
                     <Form className="w-100 d-flex flex-column justify-content-center align-items-center">
                         <h2>Login</h2>
                         <div className="inputbox d-flex flex-column">
+                            {main_err === "" ? null : (
+                                <div className="bg-danger">
+                                    <strong>{main_err}</strong>
+                                </div>
+                            )}
                             <Field
                                 type="text"
                                 name="email"
@@ -82,6 +103,7 @@ function LoginForm({ login_txt, login_box, setAccount }) {
                         <button
                             type="submit"
                             className="login_btn"
+                            disabled={loading}
                             style={{
                                 color: `${login_txt}`,
                                 borderColor: `${login_txt}`,
