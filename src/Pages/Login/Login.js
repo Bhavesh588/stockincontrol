@@ -5,9 +5,10 @@ import RangeSlider from "../../Components/RangeSlider/RangeSlider";
 import ColorPicker from "../../Components/ColorPicker/ColorPicker";
 import SignupForm from "../../Components/SignupForm/SignupForm";
 import LoginForm from "../../Components/LoginForm/LoginForm";
+import ForgotPasswordForm from "../../Components/ForgotPasswordForm/ForgotPasswordForm";
 
 function Login() {
-    const [account, setAccount] = useState(false);
+    const [account, setAccount] = useState("login");
     const [login_box, setLogin_box] = useState("#ffffff");
     const [login_txt, setLogin_txt] = useState("#000000");
     const [side_box, setSide_box] = useState("#141414");
@@ -134,13 +135,18 @@ function Login() {
                                         />
                                     </div>
                                 </span>
-                                {account ? (
+                                {account === "signup" ? (
                                     <SignupForm
                                         login_txt={login_txt}
                                         setAccount={setAccount}
                                     />
-                                ) : (
+                                ) : account === "login" ? (
                                     <LoginForm
+                                        login_txt={login_txt}
+                                        setAccount={setAccount}
+                                    />
+                                ) : (
+                                    <ForgotPasswordForm
                                         login_txt={login_txt}
                                         setAccount={setAccount}
                                     />

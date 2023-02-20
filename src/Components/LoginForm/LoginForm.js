@@ -9,11 +9,9 @@ function LoginForm({ login_txt, login_box, setAccount }) {
         const errors = {};
 
         var mailFormat = /\S+@\S+\.\S+/;
-        if (!values.email) {
-            errors.email = "Required";
-        } else if (!values.email.match(mailFormat)) {
+        if (!values.email.match(mailFormat))
             errors.email = "Invalid Email address!";
-        }
+        if (!values.email) errors.email = "Required";
         if (!values.password) errors.password = "Required";
 
         return errors;
@@ -72,6 +70,8 @@ function LoginForm({ login_txt, login_box, setAccount }) {
                         </div>
                         <div className="not_account">
                             <button
+                                onClick={() => setAccount("forgotpassword")}
+                                type="button"
                                 style={{
                                     color: `${login_txt}`,
                                 }}
@@ -95,7 +95,7 @@ function LoginForm({ login_txt, login_box, setAccount }) {
             <div className="not_account">
                 <span>Don't have an account?</span>
                 <button
-                    onClick={() => setAccount(true)}
+                    onClick={() => setAccount("signup")}
                     style={{
                         color: `${login_txt}`,
                     }}
