@@ -6,12 +6,17 @@ import RangeSlider from "../../Components/RangeSlider/RangeSlider";
 import ColorPicker from "../../Components/ColorPicker/ColorPicker";
 
 function Login() {
+    const [account, setAccount] = useState(false);
     const [login_box, setLogin_box] = useState("#ffffff");
     const [login_txt, setLogin_txt] = useState("#000000");
     const [side_box, setSide_box] = useState("#141414");
     const [app_back, setApp_back] = useState(["#1b1b1b", "#141414"]);
     const [blending, setBlending] = useState([50, 50]);
     const [back_rotate, setBack_rotate] = useState(90);
+
+    const handleSubmit = () => {
+        console.log("Handle Submit");
+    };
 
     return (
         <div className="login">
@@ -132,35 +137,166 @@ function Login() {
                                         />
                                     </div>
                                 </span>
-                                <h2>Login</h2>
-                                <div className="btn-all facebook-btn d-flex align-items-center">
-                                    <FontAwesomeIcon
-                                        icon="fa-brands fa-facebook-f"
-                                        className="mx-2"
-                                    />
-                                    <span className="w-100 d-flex justify-content-center">
-                                        Login with Facebook
-                                    </span>
-                                </div>
-                                <div className="btn-all google-btn d-flex align-items-center">
-                                    <FontAwesomeIcon
-                                        icon="fa-brands fa-google"
-                                        className="mx-2"
-                                    />
-                                    <span className="w-100 d-flex justify-content-center">
-                                        Login with Google
-                                    </span>
-                                </div>
-                                <div className="btn-all twitter-btn d-flex align-items-center">
-                                    <FontAwesomeIcon
-                                        icon="fa-brands fa-twitter"
-                                        className="mx-2"
-                                    />
-                                    <span className="w-100 d-flex justify-content-center">
-                                        Login with Twitter
-                                    </span>
-                                </div>
-                                <div className="btn-all instagram-btn d-flex align-items-center">
+                                {account ? (
+                                    <form
+                                        onSubmit={handleSubmit}
+                                        className="w-100 d-flex flex-column justify-content-center align-items-center"
+                                    >
+                                        <h2>Sign Up</h2>
+                                        <div className="inputbox d-flex flex-column">
+                                            <input
+                                                type="text"
+                                                placeholder="Email"
+                                                className="input_text"
+                                                style={{
+                                                    color: `${login_txt}`,
+                                                    borderColor: `${login_txt}`,
+                                                }}
+                                            />
+                                            <input
+                                                type="password"
+                                                placeholder="Password"
+                                                className="input_text"
+                                                style={{
+                                                    color: `${login_txt}`,
+                                                    borderColor: `${login_txt}`,
+                                                }}
+                                            />
+                                            <input
+                                                type="password"
+                                                placeholder="Confirm Password"
+                                                className="input_text"
+                                                style={{
+                                                    color: `${login_txt}`,
+                                                    borderColor: `${login_txt}`,
+                                                }}
+                                            />
+                                        </div>
+                                        <button
+                                            className="login_btn"
+                                            style={{
+                                                color: `${login_txt}`,
+                                                borderColor: `${login_txt}`,
+                                            }}
+                                        >
+                                            Signup
+                                        </button>
+                                        <div className="not_account">
+                                            <span>
+                                                Already have an account?
+                                            </span>
+                                            <button
+                                                onClick={() =>
+                                                    setAccount(false)
+                                                }
+                                                style={{
+                                                    color: `${login_txt}`,
+                                                }}
+                                            >
+                                                Login
+                                            </button>
+                                        </div>
+                                    </form>
+                                ) : (
+                                    <form
+                                        onSubmit={handleSubmit}
+                                        className="w-100 d-flex flex-column justify-content-center align-items-center"
+                                    >
+                                        <h2>Login</h2>
+                                        <div className="inputbox d-flex flex-column">
+                                            <input
+                                                type="text"
+                                                placeholder="Email"
+                                                className="input_text"
+                                                style={{
+                                                    color: `${login_txt}`,
+                                                    borderColor: `${login_txt}`,
+                                                }}
+                                            />
+                                            <input
+                                                type="password"
+                                                placeholder="Password"
+                                                className="input_text"
+                                                style={{
+                                                    color: `${login_txt}`,
+                                                    borderColor: `${login_txt}`,
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="not_account">
+                                            <button
+                                                style={{
+                                                    color: `${login_txt}`,
+                                                }}
+                                            >
+                                                Forgot Password?
+                                            </button>
+                                        </div>
+                                        <button
+                                            className="login_btn"
+                                            style={{
+                                                color: `${login_txt}`,
+                                                borderColor: `${login_txt}`,
+                                            }}
+                                        >
+                                            Login
+                                        </button>
+                                        <div className="not_account">
+                                            <span>Don't have an account?</span>
+                                            <button
+                                                onClick={() => setAccount(true)}
+                                                style={{
+                                                    color: `${login_txt}`,
+                                                }}
+                                            >
+                                                Create Account
+                                            </button>
+                                        </div>
+                                        <div className="w-100 d-flex flex-column justify-content-center align-items-center">
+                                            <hr
+                                                style={{
+                                                    backgroundColor: `${login_txt}`,
+                                                }}
+                                            />
+                                            <span
+                                                className="or_text"
+                                                style={{
+                                                    backgroundColor: `${login_box}`,
+                                                }}
+                                            >
+                                                OR
+                                            </span>
+                                        </div>
+                                        <div className="btn-all facebook-btn d-flex align-items-center">
+                                            <FontAwesomeIcon
+                                                icon="fa-brands fa-facebook-f"
+                                                className="mx-2"
+                                            />
+                                            <span className="w-100 d-flex justify-content-center">
+                                                Login with Facebook
+                                            </span>
+                                        </div>
+                                        <div className="btn-all google-btn d-flex align-items-center">
+                                            <FontAwesomeIcon
+                                                icon="fa-brands fa-google"
+                                                className="mx-2"
+                                            />
+                                            <span className="w-100 d-flex justify-content-center">
+                                                Login with Google
+                                            </span>
+                                        </div>
+                                        <div className="btn-all twitter-btn d-flex align-items-center">
+                                            <FontAwesomeIcon
+                                                icon="fa-brands fa-twitter"
+                                                className="mx-2"
+                                            />
+                                            <span className="w-100 d-flex justify-content-center">
+                                                Login with Twitter
+                                            </span>
+                                        </div>
+                                    </form>
+                                )}
+                                {/* <div className="btn-all instagram-btn d-flex align-items-center">
                                     <FontAwesomeIcon
                                         icon="fa-brands fa-instagram"
                                         className="mx-2"
@@ -168,7 +304,7 @@ function Login() {
                                     <span className="w-100 d-flex justify-content-center">
                                         Login with Instagram
                                     </span>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     </div>
