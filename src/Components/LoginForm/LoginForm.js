@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "./LoginForm.scss";
 import { useAuth } from "../../contexts/AuthContext";
 
-function LoginForm({ login_txt, login_box, setAccount }) {
+function LoginForm({ login_txt, login_box, message, setAccount }) {
     const { signup } = useAuth();
     const [loading, setLoading] = useState(false);
     const [main_err, setMain_err] = useState("");
@@ -56,12 +56,17 @@ function LoginForm({ login_txt, login_box, setAccount }) {
                         <h2>Login</h2>
                         <div className="inputbox d-flex flex-column">
                             {main_err === "" ? null : (
-                                <div className="bg-danger">
+                                <div className="bg-danger p-1 text-center text-light">
                                     <strong>{main_err}</strong>
                                 </div>
                             )}
+                            {message === "" ? null : (
+                                <div className="bg-success p-1 text-center text-light">
+                                    <strong>{message}</strong>
+                                </div>
+                            )}
                             <Field
-                                type="text"
+                                type="email"
                                 name="email"
                                 placeholder="Email"
                                 className="input_text"

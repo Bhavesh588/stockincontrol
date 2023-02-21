@@ -1,9 +1,14 @@
+import React, { useState } from "react";
 import { Field, Form, Formik } from "formik";
-import React from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
 import "./ForgotPasswordForm.scss";
 
-function ForgotPasswordForm({ login_txt, setAccount }) {
+function ForgotPasswordForm({ login_txt, setMessage, setAccount }) {
+    const { resetPassword } = useAuth();
+    const [loading, setLoading] = useState(false);
+    const [main_err, setMain_err] = useState("");
+
     const validate = (values) => {
         const errors = {};
 
@@ -19,9 +24,20 @@ function ForgotPasswordForm({ login_txt, setAccount }) {
         email: "",
     };
 
-    const onSubmit = (values, { resetForm }) => {
-        alert(JSON.stringify(values, null, 2));
-        resetForm();
+    const onSubmit = async (values, { resetForm }) => {
+        // alert(JSON.stringify(values, null, 2));
+        try {
+            setMain_err("");
+            setMessage("");
+            setLoading(true);
+            await resetPassword(values.email);
+            setMessage("Check your inbox for futher instructions");
+            resetForm();
+            setAccount("login");
+        } catch (error) {
+            setMain_err("Failed to reset Password");
+        }
+        setLoading(false);
     };
 
     return (
@@ -36,8 +52,13 @@ function ForgotPasswordForm({ login_txt, setAccount }) {
                     <Form className="w-100 d-flex flex-column justify-content-center align-items-center">
                         <h2>Send Email</h2>
                         <div className="inputbox d-flex flex-column">
+                            {main_err === "" ? null : (
+                                <div className="bg-danger p-1 text-center text-light">
+                                    <strong>{main_err}</strong>
+                                </div>
+                            )}
                             <Field
-                                type="text"
+                                type="email"
                                 name="email"
                                 placeholder="Email"
                                 className="input_text"
@@ -55,6 +76,7 @@ function ForgotPasswordForm({ login_txt, setAccount }) {
                         <button
                             type="submit"
                             className="login_btn"
+                            disabled={loading}
                             style={{
                                 color: `${login_txt}`,
                                 borderColor: `${login_txt}`,

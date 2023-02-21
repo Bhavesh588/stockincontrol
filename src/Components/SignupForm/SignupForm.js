@@ -60,12 +60,12 @@ function SignupForm({ login_txt, setAccount }) {
                         <h2>Sign Up</h2>
                         <div className="inputbox d-flex flex-column">
                             {main_err === "" ? null : (
-                                <div className="bg-danger">
+                                <div className="bg-danger p-1 text-center text-light">
                                     <strong>{main_err}</strong>
                                 </div>
                             )}
                             <Field
-                                type="text"
+                                type="email"
                                 placeholder="Email"
                                 name="email"
                                 className="input_text"

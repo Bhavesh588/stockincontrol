@@ -15,6 +15,7 @@ function Login() {
     const [app_back, setApp_back] = useState(["#1b1b1b", "#141414"]);
     const [blending, setBlending] = useState([50, 50]);
     const [back_rotate, setBack_rotate] = useState(90);
+    const [message, setMessage] = useState("");
 
     return (
         <div className="login">
@@ -144,11 +145,13 @@ function Login() {
                                     <LoginForm
                                         login_txt={login_txt}
                                         login_box={login_box}
+                                        message={message}
                                         setAccount={setAccount}
                                     />
                                 ) : (
                                     <ForgotPasswordForm
                                         login_txt={login_txt}
+                                        setMessage={setMessage}
                                         setAccount={setAccount}
                                     />
                                 )}
