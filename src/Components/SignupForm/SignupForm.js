@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import { Field, Form, Formik } from "formik";
 import { useAuth } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
 
 import "./SignupForm.scss";
 
-function SignupForm({ login_txt, setAccount }) {
-    const { login } = useAuth();
+function SignupForm({ login_txt, setMessage, setAccount }) {
+    const { signup } = useAuth();
     const [main_err, setMain_err] = useState("");
     const [loading, setLoading] = useState(false);
-
-    const navigate = useNavigate();
 
     const validate = (values) => {
         const errors = {};
@@ -38,9 +35,10 @@ function SignupForm({ login_txt, setAccount }) {
         try {
             setMain_err("");
             setLoading(true);
-            await login(values.email, values.password);
+            await signup(values.email, values.password);
             resetForm();
-            navigate("/");
+            setAccount("login");
+            setMessage("Verify your Email");
         } catch (error) {
             setMain_err("Failed to create your account");
         }

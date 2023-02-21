@@ -139,6 +139,7 @@ function Login() {
                                 {account === "signup" ? (
                                     <SignupForm
                                         login_txt={login_txt}
+                                        setMessage={setMessage}
                                         setAccount={setAccount}
                                     />
                                 ) : account === "login" ? (

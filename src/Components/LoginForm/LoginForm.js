@@ -7,7 +7,7 @@ import "./LoginForm.scss";
 import { useAuth } from "../../contexts/AuthContext";
 
 function LoginForm({ login_txt, login_box, message, setAccount }) {
-    const { signup } = useAuth();
+    const { err, login, googleLogin } = useAuth();
     const [loading, setLoading] = useState(false);
     const [main_err, setMain_err] = useState("");
 
@@ -34,7 +34,7 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
         try {
             setMain_err("");
             setLoading(true);
-            await signup(values.email, values.password);
+            await login(values.email, values.password);
             resetForm();
             navigate("/");
         } catch (error) {
@@ -42,6 +42,42 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
         }
         setLoading(false);
     };
+
+    const loginWithGoogle = async () => {
+        try {
+            setMain_err("");
+            setLoading(true);
+            await googleLogin();
+            navigate("/");
+        } catch (error) {
+            setMain_err("Failed to sign in with Google");
+        }
+        setLoading(false);
+    };
+
+    // const loginWithFacebook = async () => {
+    //     try {
+    //         setMain_err("");
+    //         setLoading(true);
+    //         await facebookLogin();
+    //         navigate("/");
+    //     } catch (error) {
+    //         setMain_err("Failed to sign in with Facebook");
+    //     }
+    //     setLoading(false);
+    // };
+
+    // const loginWithTwitter = async () => {
+    //     try {
+    //         setMain_err("");
+    //         setLoading(true);
+    //         await twitterLogin();
+    //         navigate("/");
+    //     } catch (error) {
+    //         setMain_err("Failed to sign in with Facebook");
+    //     }
+    //     setLoading(false);
+    // };
 
     return (
         <div className="loginform w-100 d-flex flex-column justify-content-center align-items-center">
@@ -55,6 +91,11 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
                     <Form className="w-100 d-flex flex-column justify-content-center align-items-center">
                         <h2>Login</h2>
                         <div className="inputbox d-flex flex-column">
+                            {err === "" ? null : (
+                                <div className="bg-danger p-1 text-center text-light">
+                                    <strong>{err}</strong>
+                                </div>
+                            )}
                             {main_err === "" ? null : (
                                 <div className="bg-danger p-1 text-center text-light">
                                     <strong>{main_err}</strong>
@@ -145,7 +186,10 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
                     OR
                 </div>
             </div>
-            <div className="btn-all facebook-btn d-flex align-items-center">
+            {/* <div
+                className="btn-all facebook-btn d-flex align-items-center"
+                onClick={loginWithFacebook}
+            >
                 <FontAwesomeIcon
                     icon="fa-brands fa-facebook-f"
                     className="mx-2"
@@ -153,19 +197,25 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
                 <span className="w-100 d-flex justify-content-center">
                     Login with Facebook
                 </span>
-            </div>
-            <div className="btn-all google-btn d-flex align-items-center">
+            </div> */}
+            <div
+                className="btn-all google-btn d-flex align-items-center"
+                onClick={loginWithGoogle}
+            >
                 <FontAwesomeIcon icon="fa-brands fa-google" className="mx-2" />
                 <span className="w-100 d-flex justify-content-center">
                     Login with Google
                 </span>
             </div>
-            <div className="btn-all twitter-btn d-flex align-items-center">
+            {/* <div
+                className="btn-all twitter-btn d-flex align-items-center"
+                onClick={loginWithTwitter}
+            >
                 <FontAwesomeIcon icon="fa-brands fa-twitter" className="mx-2" />
                 <span className="w-100 d-flex justify-content-center">
                     Login with Twitter
                 </span>
-            </div>
+            </div> */}
         </div>
     );
 }

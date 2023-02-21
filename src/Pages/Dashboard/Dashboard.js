@@ -35,6 +35,9 @@ function Dashboard() {
                 )}
                 <span>
                     <strong>Email:</strong> {currentUser.email}
+                    <br />
+                    <strong>Email Verified:</strong>{" "}
+                    {JSON.stringify(currentUser.emailVerified)}
                 </span>
             </div>
         </div>
