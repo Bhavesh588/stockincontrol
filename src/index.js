@@ -9,13 +9,26 @@ import { fab } from "@fortawesome/free-brands-svg-icons";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { BrowserRouter as Router } from "react-router-dom";
 
+import { applyMiddleware, createStore } from "redux";
+import { composeWithDevTools } from "@redux-devtools/extension";
+import { Provider } from "react-redux";
+import rootReducer from "./Redux/rootReducer";
+import thunk from "redux-thunk";
+
 library.add(fab, faPaperPlane);
+
+const store = createStore(
+    rootReducer,
+    composeWithDevTools(applyMiddleware(thunk))
+);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <React.StrictMode>
         <Router>
-            <App />
+            <Provider store={store}>
+                <App />
+            </Provider>
         </Router>
     </React.StrictMode>
 );

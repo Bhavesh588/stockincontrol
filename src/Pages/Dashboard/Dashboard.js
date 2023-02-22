@@ -34,6 +34,8 @@ function Dashboard() {
                     </div>
                 )}
                 <span>
+                    <strong>Full Name:</strong> {currentUser.displayName}
+                    <br />
                     <strong>Email:</strong> {currentUser.email}
                     <br />
                     <strong>Email Verified:</strong>{" "}
