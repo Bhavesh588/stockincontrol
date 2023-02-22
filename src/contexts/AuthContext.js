@@ -45,7 +45,7 @@ export function AuthProvider({ children }) {
                         finalUser
                     );
                     await sendEmailVerification(user.user, {
-                        url: "http://localhost:3000/",
+                        url: "http://localhost:3000/login",
                     });
                 }
             })
