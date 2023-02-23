@@ -17,12 +17,14 @@ export function useAuth() {
 }
 
 // prettier-ignore
-export function AuthProvider({ children }) {
+export function AuthProvider({ children}) {
+
     const [currentUser, setCurrentUser] = useState();
     const [err, setErr] = useState("");
     const [loading, setLoading] = useState(true);
 
     async function signup(email, password, data) {
+        setErr('')
         return createUserWithEmailAndPassword(auth, email, password)
             .then(async (user) => {
                 if (user !== null) {
@@ -49,7 +51,11 @@ export function AuthProvider({ children }) {
                     });
                 }
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+                if(err.message === 'Firebase: Error (auth/email-already-in-use).') {
+                    setErr("Email is Already Registered")
+                }
+            });
     }
 
     async function login(email, password) {
@@ -74,7 +80,7 @@ export function AuthProvider({ children }) {
                     setErr("Email is not Verified");
                 }
             }
-        });
+        })
     }
 
     function logout() {
@@ -85,7 +91,7 @@ export function AuthProvider({ children }) {
         return sendPasswordResetEmail(auth, email);
     }
 
-    function googleLogin() {
+    async function googleLogin() {
         return signInWithPopup(auth, googleAuth).then(async (user) => {
             if (user !== null) {
                 var finalUser = {
@@ -123,6 +129,8 @@ export function AuthProvider({ children }) {
                 if (user.emailVerified) {
                     setCurrentUser(user);
                 }
+            } else {
+                setCurrentUser(null)
             }
             setLoading(false);
         });

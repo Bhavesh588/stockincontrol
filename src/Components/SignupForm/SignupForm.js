@@ -6,7 +6,7 @@ import "./SignupForm.scss";
 import { countries_data } from "../../Data/Countries_data";
 
 function SignupForm({ login_txt, setMessage, setAccount }) {
-    const { signup } = useAuth();
+    const { err, signup } = useAuth();
     const [main_err, setMain_err] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -43,9 +43,11 @@ function SignupForm({ login_txt, setMessage, setAccount }) {
             setMain_err("");
             setLoading(true);
             await signup(values.email, values.password, values);
-            resetForm();
-            setAccount("login");
-            setMessage("Verify your Email");
+            if (err !== "") {
+                resetForm();
+                setAccount("login");
+                setMessage("Verify your Email");
+            }
         } catch (error) {
             setMain_err("Failed to create your account");
         }
@@ -67,6 +69,11 @@ function SignupForm({ login_txt, setMessage, setAccount }) {
                             {main_err === "" ? null : (
                                 <div className="bg-danger p-1 text-center text-light">
                                     <strong>{main_err}</strong>
+                                </div>
+                            )}
+                            {err === "" ? null : (
+                                <div className="bg-danger p-1 text-center text-light">
+                                    <strong>{err}</strong>
                                 </div>
                             )}
                             <Field

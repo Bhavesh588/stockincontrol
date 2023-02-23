@@ -1,17 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { Form, Formik } from "formik";
+import axios from "axios";
+
+import { countries_data } from "../../Data/Countries_data";
 
 import "./Dashboard.scss";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { connect } from "react-redux";
 
-function Dashboard() {
+function Dashboard({ login_txt, ...props }) {
+    const { Register, updateRegister } = props;
+
     const [logout_err, setLogout_err] = useState("");
+    const [bol_logout, setBol_logout] = useState(false);
     const { currentUser, logout } = useAuth();
+
+    useEffect(() => {
+        if (!bol_logout) {
+            if (Register === null) {
+                axios
+                    .get(`http://localhost:5000/register/${currentUser.uid}`)
+                    .then((res) => updateRegister(res.data[0]));
+            } else {
+                if (Register.country === null) {
+                    if (document.getElementById("btn_modal")) {
+                        var btn = document.getElementById("btn_modal");
+                        btn.click();
+                    }
+                }
+            }
+        } else {
+            setBol_logout(true);
+        }
+    }, [Register, updateRegister, currentUser, bol_logout]);
 
     const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
+            setBol_logout(true);
+            await updateRegister(null);
             await logout();
             navigate("/login");
         } catch (error) {
@@ -19,8 +49,242 @@ function Dashboard() {
         }
     };
 
+    const [main_err, setMain_err] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const validate = (values) => {
+        const errors = {};
+
+        if (!values.country) errors.country = "Required";
+        if (!values.state) errors.state = "Required";
+
+        return errors;
+    };
+
+    const initialValues = {
+        country: "",
+        state: "",
+    };
+
+    const onSubmit = async (values, { resetForm }) => {
+        // alert(JSON.stringify(values, null, 2));
+        try {
+            setMain_err("");
+            setLoading(true);
+            await axios
+                .put("http://localhost:5000/register/edit", {
+                    id: currentUser.uid,
+                    country: values.country,
+                    state: values.state,
+                })
+                .then(
+                    async () =>
+                        await updateRegister({
+                            ...Register,
+                            country: values.country,
+                            state: values.state,
+                        })
+                );
+            resetForm();
+        } catch (error) {
+            setMain_err("Failed to Edit");
+        }
+        setLoading(false);
+    };
+
     return (
-        <div>
+        <div className="dashboard">
+            <button
+                type="button"
+                className="btn btn-primary d-none"
+                id="btn_modal"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+            >
+                Launch demo modal
+            </button>
+            <div
+                className="modal fade"
+                tabIndex="-1"
+                role="dialog"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+                aria-labelledby="staticBackdropLabel"
+                aria-hidden="true"
+                id="exampleModal"
+            >
+                <div
+                    className="modal-dialog modal-dialog-centered"
+                    role="document"
+                >
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Details</h5>
+                            {/* <button
+                                type="button"
+                                className="btn"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            >
+                                <span aria-hidden="true">
+                                    <FontAwesomeIcon icon="xmark" />
+                                </span>
+                            </button> */}
+                        </div>
+                        <Formik
+                            initialValues={initialValues}
+                            onSubmit={onSubmit}
+                            validate={validate}
+                            enableReinitialize={true}
+                        >
+                            {(props) => (
+                                <div>
+                                    <Form className="w-100 d-flex flex-column justify-content-center align-items-center">
+                                        <div className="modal-body d-flex flex-column justify-content-center align-items-center">
+                                            <div className="inputbox d-flex flex-column">
+                                                {main_err === "" ? null : (
+                                                    <div className="bg-danger p-1 text-center text-light">
+                                                        <strong>
+                                                            {main_err}
+                                                        </strong>
+                                                    </div>
+                                                )}
+                                                <select
+                                                    name="country"
+                                                    defaultValue={
+                                                        props.values.country
+                                                    }
+                                                    onChange={
+                                                        props.handleChange
+                                                    }
+                                                    className="input_text"
+                                                    style={{
+                                                        color: `${login_txt}`,
+                                                        borderColor: `${login_txt}`,
+                                                        display: "block",
+                                                    }}
+                                                >
+                                                    <option
+                                                        value=""
+                                                        label="Select Country"
+                                                        disabled
+                                                    />
+                                                    {countries_data?.map(
+                                                        (country, i) => (
+                                                            <option
+                                                                value={
+                                                                    country.country
+                                                                }
+                                                                label={
+                                                                    country.country
+                                                                }
+                                                                key={i}
+                                                            />
+                                                        )
+                                                    )}
+                                                </select>
+                                                {props.errors.country &&
+                                                props.touched.country ? (
+                                                    <span className="text-danger">
+                                                        {props.errors.country}
+                                                    </span>
+                                                ) : null}
+                                                <select
+                                                    name="state"
+                                                    defaultValue={
+                                                        props.values.state
+                                                    }
+                                                    onChange={
+                                                        props.handleChange
+                                                    }
+                                                    className="input_text"
+                                                    style={{
+                                                        color: `${login_txt}`,
+                                                        borderColor: `${login_txt}`,
+                                                        display: "block",
+                                                    }}
+                                                >
+                                                    <option
+                                                        value=""
+                                                        label="Select State"
+                                                        disabled
+                                                    />
+                                                    {countries_data?.map(
+                                                        (country, i) =>
+                                                            props.values
+                                                                .country ===
+                                                            country.country
+                                                                ? country.states.map(
+                                                                      (
+                                                                          state,
+                                                                          ind
+                                                                      ) => (
+                                                                          <option
+                                                                              value={
+                                                                                  state
+                                                                              }
+                                                                              label={
+                                                                                  state
+                                                                              }
+                                                                              key={
+                                                                                  ind
+                                                                              }
+                                                                          />
+                                                                      )
+                                                                  )
+                                                                : null
+                                                    )}
+                                                </select>
+                                                {props.errors.state &&
+                                                props.touched.state ? (
+                                                    <span className="text-danger">
+                                                        {props.errors.state}
+                                                    </span>
+                                                ) : null}
+                                            </div>
+                                            {/* <button
+                                                type="submit"
+                                                className="login_btn"
+                                                disabled={loading}
+                                                style={{
+                                                    color: `${login_txt}`,
+                                                    borderColor: `${login_txt}`,
+                                                }}
+                                            >
+                                                Save
+                                            </button> */}
+                                        </div>
+                                        <div className="w-100 modal-footer d-flex justify-content-end">
+                                            <button
+                                                type="submit"
+                                                className="btn"
+                                                data-bs-dismiss="modal"
+                                                disabled={loading}
+                                                style={{
+                                                    color: `${login_txt}`,
+                                                    borderColor: `${login_txt}`,
+                                                }}
+                                            >
+                                                Save
+                                            </button>
+                                            {/* <button
+                                                type="button"
+                                                className="btn"
+                                                data-bs-dismiss="modal"
+                                                onClick={() =>
+                                                    props.resetForm()
+                                                }
+                                            >
+                                                Close
+                                            </button> */}
+                                        </div>
+                                    </Form>
+                                </div>
+                            )}
+                        </Formik>
+                    </div>
+                </div>
+            </div>
             <div className="d-flex justify-content-between p-3 bg-dark text-light align-items-center">
                 <div>Dashboard</div>
                 <button onClick={handleLogout} className="btn btn-primary">
@@ -40,10 +304,36 @@ function Dashboard() {
                     <br />
                     <strong>Email Verified:</strong>{" "}
                     {JSON.stringify(currentUser.emailVerified)}
+                    <br />
+                    {Register?.country ? (
+                        <>
+                            <strong>Country:</strong> {Register.country}
+                            <br />
+                            <strong>State:</strong> {Register.state}
+                            <br />
+                        </>
+                    ) : null}
                 </span>
             </div>
         </div>
     );
 }
 
-export default Dashboard;
+const mapStateToProps = (state) => {
+    return {
+        Register: state.Register,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateRegister: (val) => {
+            dispatch({
+                type: "REGISTER",
+                item: val,
+            });
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import "./Login.scss";
 import RangeSlider from "../../Components/RangeSlider/RangeSlider";
@@ -7,16 +7,24 @@ import SignupForm from "../../Components/SignupForm/SignupForm";
 import LoginForm from "../../Components/LoginForm/LoginForm";
 import ForgotPasswordForm from "../../Components/ForgotPasswordForm/ForgotPasswordForm";
 
-function Login() {
-    const [account, setAccount] = useState("login");
-    const [login_box, setLogin_box] = useState("#ffffff");
-    const [login_txt, setLogin_txt] = useState("#000000");
-    const [side_box, setSide_box] = useState("#141414");
-    const [app_back, setApp_back] = useState(["#1b1b1b", "#141414"]);
-    const [blending, setBlending] = useState([50, 50]);
-    const [back_rotate, setBack_rotate] = useState(90);
-    const [message, setMessage] = useState("");
-
+function Login({
+    account,
+    setAccount,
+    login_box,
+    setLogin_box,
+    login_txt,
+    setLogin_txt,
+    side_box,
+    setSide_box,
+    app_back,
+    setApp_back,
+    blending,
+    setBlending,
+    back_rotate,
+    setBack_rotate,
+    message,
+    setMessage,
+}) {
     return (
         <div className="login">
             <div className="tilt-container">
@@ -74,7 +82,7 @@ function Login() {
                 >
                     <div className="container h-100 d-flex align-items-center justify-content-center">
                         <div className="row">
-                            <div className="col tooltip-2">
+                            <div className="col-md tooltip-2">
                                 <span className="tooltiptext d-flex flex-column p-2">
                                     <span>Background Color</span>
                                     <div className="my-1">
@@ -112,7 +120,7 @@ function Login() {
                                 </div>
                             </div>
                             <div
-                                className="col d-flex flex-column justify-content-center align-items-center tooltip-2"
+                                className="col-md d-flex flex-column justify-content-center align-items-center tooltip-2"
                                 style={{
                                     backgroundColor: `${login_box}`,
                                     color: `${login_txt}`,

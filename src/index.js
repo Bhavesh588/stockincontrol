@@ -3,10 +3,12 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import { applyMiddleware, createStore } from "redux";
@@ -15,7 +17,7 @@ import { Provider } from "react-redux";
 import rootReducer from "./Redux/rootReducer";
 import thunk from "redux-thunk";
 
-library.add(fab, faPaperPlane);
+library.add(fab, faPaperPlane, faXmark);
 
 const store = createStore(
     rootReducer,

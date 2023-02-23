@@ -38,7 +38,7 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
             resetForm();
             navigate("/");
         } catch (error) {
-            setMain_err("Failed to sign in");
+            setMain_err("Your Email / Password does not correct");
         }
         setLoading(false);
     };
@@ -50,7 +50,11 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
             await googleLogin();
             navigate("/");
         } catch (error) {
-            setMain_err("Failed to sign in with Google");
+            if (
+                error.message !== "Firebase: Error (auth/popup-closed-by-user)."
+            ) {
+                setMain_err("Failed to sign in with Google");
+            }
         }
         setLoading(false);
     };
