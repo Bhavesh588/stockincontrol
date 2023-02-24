@@ -15,12 +15,10 @@ function SignupForm({ login_txt, setMessage, setAccount }) {
 
         var mailFormat = /\S+@\S+\.\S+/;
         if (!values.fullName) errors.fullName = "Required";
-        if (!values.email.match(mailFormat))
-            errors.email = "Invalid Email address!";
+        if (!values.email.match(mailFormat)) errors.email = "Invalid Email address!";
         if (!values.email) errors.email = "Required";
         if (!values.password) errors.password = "Required";
-        if (values.password !== values.confirmPassword)
-            errors.confirmPassword = "Password does not match";
+        if (values.password !== values.confirmPassword) errors.confirmPassword = "Password does not match";
         if (!values.confirmPassword) errors.confirmPassword = "Required";
         if (!values.country) errors.country = "Required";
         if (!values.state) errors.state = "Required";
@@ -56,12 +54,7 @@ function SignupForm({ login_txt, setMessage, setAccount }) {
 
     return (
         <div className="signup w-100 d-flex flex-column justify-content-center align-items-center">
-            <Formik
-                initialValues={initialValues}
-                onSubmit={onSubmit}
-                validate={validate}
-                enableReinitialize={true}
-            >
+            <Formik initialValues={initialValues} onSubmit={onSubmit} validate={validate} enableReinitialize={true}>
                 {(props) => (
                     <Form className="w-100 d-flex flex-column justify-content-center align-items-center">
                         <h2>Sign Up</h2>
@@ -86,11 +79,7 @@ function SignupForm({ login_txt, setMessage, setAccount }) {
                                     borderColor: `${login_txt}`,
                                 }}
                             />
-                            {props.errors.fullName && props.touched.fullName ? (
-                                <span className="text-danger">
-                                    {props.errors.fullName}
-                                </span>
-                            ) : null}
+                            {props.errors.fullName && props.touched.fullName ? <span className="text-danger">{props.errors.fullName}</span> : null}
                             <Field
                                 type="email"
                                 placeholder="Email"
@@ -101,11 +90,7 @@ function SignupForm({ login_txt, setMessage, setAccount }) {
                                     borderColor: `${login_txt}`,
                                 }}
                             />
-                            {props.errors.email && props.touched.email ? (
-                                <span className="text-danger">
-                                    {props.errors.email}
-                                </span>
-                            ) : null}
+                            {props.errors.email && props.touched.email ? <span className="text-danger">{props.errors.email}</span> : null}
                             <Field
                                 type="password"
                                 placeholder="Password"
@@ -116,11 +101,7 @@ function SignupForm({ login_txt, setMessage, setAccount }) {
                                     borderColor: `${login_txt}`,
                                 }}
                             />
-                            {props.errors.password && props.touched.password ? (
-                                <span className="text-danger">
-                                    {props.errors.password}
-                                </span>
-                            ) : null}
+                            {props.errors.password && props.touched.password ? <span className="text-danger">{props.errors.password}</span> : null}
                             <Field
                                 type="password"
                                 placeholder="Confirm Password"
@@ -131,11 +112,8 @@ function SignupForm({ login_txt, setMessage, setAccount }) {
                                     borderColor: `${login_txt}`,
                                 }}
                             />
-                            {props.errors.confirmPassword &&
-                            props.touched.confirmPassword ? (
-                                <span className="text-danger">
-                                    {props.errors.confirmPassword}
-                                </span>
+                            {props.errors.confirmPassword && props.touched.confirmPassword ? (
+                                <span className="text-danger">{props.errors.confirmPassword}</span>
                             ) : null}
                             <select
                                 name="country"
@@ -148,24 +126,12 @@ function SignupForm({ login_txt, setMessage, setAccount }) {
                                     display: "block",
                                 }}
                             >
-                                <option
-                                    value=""
-                                    label="Select Country"
-                                    disabled
-                                />
+                                <option value="" label="Select Country" disabled />
                                 {countries_data?.map((country, i) => (
-                                    <option
-                                        value={country.country}
-                                        label={country.country}
-                                        key={i}
-                                    />
+                                    <option value={country.country} label={country.country} key={i} />
                                 ))}
                             </select>
-                            {props.errors.country && props.touched.country ? (
-                                <span className="text-danger">
-                                    {props.errors.country}
-                                </span>
-                            ) : null}
+                            {props.errors.country && props.touched.country ? <span className="text-danger">{props.errors.country}</span> : null}
                             <select
                                 name="state"
                                 defaultValue={props.values.state}
@@ -177,28 +143,14 @@ function SignupForm({ login_txt, setMessage, setAccount }) {
                                     display: "block",
                                 }}
                             >
-                                <option
-                                    value=""
-                                    label="Select State"
-                                    disabled
-                                />
+                                <option value="" label="Select State" disabled />
                                 {countries_data?.map((country, i) =>
                                     props.values.country === country.country
-                                        ? country.states.map((state, ind) => (
-                                              <option
-                                                  value={state}
-                                                  label={state}
-                                                  key={ind}
-                                              />
-                                          ))
+                                        ? country.states.map((state, ind) => <option value={state} label={state} key={ind} />)
                                         : null
                                 )}
                             </select>
-                            {props.errors.state && props.touched.state ? (
-                                <span className="text-danger">
-                                    {props.errors.state}
-                                </span>
-                            ) : null}
+                            {props.errors.state && props.touched.state ? <span className="text-danger">{props.errors.state}</span> : null}
                         </div>
                         <button
                             type="submit"

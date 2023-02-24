@@ -17,8 +17,7 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
         const errors = {};
 
         var mailFormat = /\S+@\S+\.\S+/;
-        if (!values.email.match(mailFormat))
-            errors.email = "Invalid Email address!";
+        if (!values.email.match(mailFormat)) errors.email = "Invalid Email address!";
         if (!values.email) errors.email = "Required";
         if (!values.password) errors.password = "Required";
 
@@ -50,9 +49,7 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
             await googleLogin();
             navigate("/");
         } catch (error) {
-            if (
-                error.message !== "Firebase: Error (auth/popup-closed-by-user)."
-            ) {
+            if (error.message !== "Firebase: Error (auth/popup-closed-by-user).") {
                 setMain_err("Failed to sign in with Google");
             }
         }
@@ -85,12 +82,7 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
 
     return (
         <div className="loginform w-100 d-flex flex-column justify-content-center align-items-center">
-            <Formik
-                initialValues={initialValues}
-                onSubmit={onSubmit}
-                validate={validate}
-                enableReinitialize={true}
-            >
+            <Formik initialValues={initialValues} onSubmit={onSubmit} validate={validate} enableReinitialize={true}>
                 {(props) => (
                     <Form className="w-100 d-flex flex-column justify-content-center align-items-center">
                         <h2>Login</h2>
@@ -120,11 +112,7 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
                                     borderColor: `${login_txt}`,
                                 }}
                             />
-                            {props.errors.email && props.touched.email ? (
-                                <span className="text-danger">
-                                    {props.errors.email}
-                                </span>
-                            ) : null}
+                            {props.errors.email && props.touched.email ? <span className="text-danger">{props.errors.email}</span> : null}
                             <Field
                                 type="password"
                                 name="password"
@@ -135,9 +123,7 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
                                     borderColor: `${login_txt}`,
                                 }}
                             />
-                            {props.errors.password && props.touched.password ? (
-                                <span className="text-danger">Required</span>
-                            ) : null}
+                            {props.errors.password && props.touched.password ? <span className="text-danger">Required</span> : null}
                         </div>
                         <div className="not_account">
                             <button
@@ -202,14 +188,9 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
                     Login with Facebook
                 </span>
             </div> */}
-            <div
-                className="btn-all google-btn d-flex align-items-center"
-                onClick={loginWithGoogle}
-            >
+            <div className="btn-all google-btn d-flex align-items-center" onClick={loginWithGoogle}>
                 <FontAwesomeIcon icon="fa-brands fa-google" className="mx-2" />
-                <span className="w-100 d-flex justify-content-center">
-                    Login with Google
-                </span>
+                <span className="w-100 d-flex justify-content-center">Login with Google</span>
             </div>
             {/* <div
                 className="btn-all twitter-btn d-flex align-items-center"

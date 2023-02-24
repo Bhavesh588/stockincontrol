@@ -19,10 +19,7 @@ import thunk from "redux-thunk";
 
 library.add(fab, faPaperPlane, faXmark);
 
-const store = createStore(
-    rootReducer,
-    composeWithDevTools(applyMiddleware(thunk))
-);
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

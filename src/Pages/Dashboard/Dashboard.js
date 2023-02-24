@@ -20,9 +20,7 @@ function Dashboard({ login_txt, ...props }) {
     useEffect(() => {
         if (!bol_logout) {
             if (Register === null) {
-                axios
-                    .get(`http://localhost:5000/register/${currentUser.uid}`)
-                    .then((res) => updateRegister(res.data[0]));
+                axios.get(`http://localhost:5000/register/${currentUser.uid}`).then((res) => updateRegister(res.data[0]));
             } else {
                 if (Register.country === null) {
                     if (document.getElementById("btn_modal")) {
@@ -94,13 +92,7 @@ function Dashboard({ login_txt, ...props }) {
 
     return (
         <div className="dashboard">
-            <button
-                type="button"
-                className="btn btn-primary d-none"
-                id="btn_modal"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModal"
-            >
+            <button type="button" className="btn btn-primary d-none" id="btn_modal" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Launch demo modal
             </button>
             <div
@@ -113,10 +105,7 @@ function Dashboard({ login_txt, ...props }) {
                 aria-hidden="true"
                 id="exampleModal"
             >
-                <div
-                    className="modal-dialog modal-dialog-centered"
-                    role="document"
-                >
+                <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">Details</h5>
@@ -131,12 +120,7 @@ function Dashboard({ login_txt, ...props }) {
                                 </span>
                             </button> */}
                         </div>
-                        <Formik
-                            initialValues={initialValues}
-                            onSubmit={onSubmit}
-                            validate={validate}
-                            enableReinitialize={true}
-                        >
+                        <Formik initialValues={initialValues} onSubmit={onSubmit} validate={validate} enableReinitialize={true}>
                             {(props) => (
                                 <div>
                                     <Form className="w-100 d-flex flex-column justify-content-center align-items-center">
@@ -144,19 +128,13 @@ function Dashboard({ login_txt, ...props }) {
                                             <div className="inputbox d-flex flex-column">
                                                 {main_err === "" ? null : (
                                                     <div className="bg-danger p-1 text-center text-light">
-                                                        <strong>
-                                                            {main_err}
-                                                        </strong>
+                                                        <strong>{main_err}</strong>
                                                     </div>
                                                 )}
                                                 <select
                                                     name="country"
-                                                    defaultValue={
-                                                        props.values.country
-                                                    }
-                                                    onChange={
-                                                        props.handleChange
-                                                    }
+                                                    defaultValue={props.values.country}
+                                                    onChange={props.handleChange}
                                                     className="input_text"
                                                     style={{
                                                         color: `${login_txt}`,
@@ -164,39 +142,18 @@ function Dashboard({ login_txt, ...props }) {
                                                         display: "block",
                                                     }}
                                                 >
-                                                    <option
-                                                        value=""
-                                                        label="Select Country"
-                                                        disabled
-                                                    />
-                                                    {countries_data?.map(
-                                                        (country, i) => (
-                                                            <option
-                                                                value={
-                                                                    country.country
-                                                                }
-                                                                label={
-                                                                    country.country
-                                                                }
-                                                                key={i}
-                                                            />
-                                                        )
-                                                    )}
+                                                    <option value="" label="Select Country" disabled />
+                                                    {countries_data?.map((country, i) => (
+                                                        <option value={country.country} label={country.country} key={i} />
+                                                    ))}
                                                 </select>
-                                                {props.errors.country &&
-                                                props.touched.country ? (
-                                                    <span className="text-danger">
-                                                        {props.errors.country}
-                                                    </span>
+                                                {props.errors.country && props.touched.country ? (
+                                                    <span className="text-danger">{props.errors.country}</span>
                                                 ) : null}
                                                 <select
                                                     name="state"
-                                                    defaultValue={
-                                                        props.values.state
-                                                    }
-                                                    onChange={
-                                                        props.handleChange
-                                                    }
+                                                    defaultValue={props.values.state}
+                                                    onChange={props.handleChange}
                                                     className="input_text"
                                                     style={{
                                                         color: `${login_txt}`,
@@ -204,42 +161,15 @@ function Dashboard({ login_txt, ...props }) {
                                                         display: "block",
                                                     }}
                                                 >
-                                                    <option
-                                                        value=""
-                                                        label="Select State"
-                                                        disabled
-                                                    />
-                                                    {countries_data?.map(
-                                                        (country, i) =>
-                                                            props.values
-                                                                .country ===
-                                                            country.country
-                                                                ? country.states.map(
-                                                                      (
-                                                                          state,
-                                                                          ind
-                                                                      ) => (
-                                                                          <option
-                                                                              value={
-                                                                                  state
-                                                                              }
-                                                                              label={
-                                                                                  state
-                                                                              }
-                                                                              key={
-                                                                                  ind
-                                                                              }
-                                                                          />
-                                                                      )
-                                                                  )
-                                                                : null
+                                                    <option value="" label="Select State" disabled />
+                                                    {countries_data?.map((country, i) =>
+                                                        props.values.country === country.country
+                                                            ? country.states.map((state, ind) => <option value={state} label={state} key={ind} />)
+                                                            : null
                                                     )}
                                                 </select>
-                                                {props.errors.state &&
-                                                props.touched.state ? (
-                                                    <span className="text-danger">
-                                                        {props.errors.state}
-                                                    </span>
+                                                {props.errors.state && props.touched.state ? (
+                                                    <span className="text-danger">{props.errors.state}</span>
                                                 ) : null}
                                             </div>
                                             {/* <button
@@ -302,8 +232,7 @@ function Dashboard({ login_txt, ...props }) {
                     <br />
                     <strong>Email:</strong> {currentUser.email}
                     <br />
-                    <strong>Email Verified:</strong>{" "}
-                    {JSON.stringify(currentUser.emailVerified)}
+                    <strong>Email Verified:</strong> {JSON.stringify(currentUser.emailVerified)}
                     <br />
                     {Register?.country ? (
                         <>
