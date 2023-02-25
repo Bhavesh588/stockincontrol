@@ -9,12 +9,17 @@ import { countries_data } from "../../Data/Countries_data";
 import "./Dashboard.scss";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from "react-redux";
+import Accounts from "../../Components/Accounts/Accounts";
+import { Premium_plans_data } from "../../Data/Premium_plans_data";
+import { Standard_plans_data } from "../../Data/Standard_plans_data";
 
 function Dashboard({ login_txt, ...props }) {
     const { Register, updateRegister } = props;
 
     const [logout_err, setLogout_err] = useState("");
     const [bol_logout, setBol_logout] = useState(false);
+
+    const [manager_select, setManager_select] = useState("All");
     const { currentUser, logout } = useAuth();
 
     useEffect(() => {
@@ -92,6 +97,9 @@ function Dashboard({ login_txt, ...props }) {
 
     return (
         <div className="dashboard">
+            <div className="back_img_container">
+                <img src={require("../../assets/dyed fabric backdrop.jpg")} alt="back_img" className="img_style" />
+            </div>
             <button type="button" className="btn btn-primary d-none" id="btn_modal" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Launch demo modal
             </button>
@@ -217,6 +225,7 @@ function Dashboard({ login_txt, ...props }) {
             </div>
             <div className="d-flex justify-content-between p-3 bg-dark text-light align-items-center">
                 <div>Dashboard</div>
+                <div>{Register?.subscribePlan}</div>
                 <button onClick={handleLogout} className="btn btn-primary">
                     Logout
                 </button>
@@ -227,22 +236,138 @@ function Dashboard({ login_txt, ...props }) {
                         <strong>{logout_err}</strong>
                     </div>
                 )}
-                <span>
-                    <strong>Full Name:</strong> {currentUser.displayName}
-                    <br />
-                    <strong>Email:</strong> {currentUser.email}
-                    <br />
-                    <strong>Email Verified:</strong> {JSON.stringify(currentUser.emailVerified)}
-                    <br />
-                    {Register?.country ? (
-                        <>
-                            <strong>Country:</strong> {Register.country}
-                            <br />
-                            <strong>State:</strong> {Register.state}
-                            <br />
-                        </>
-                    ) : null}
-                </span>
+                {Register?.subscribePlan === "Basic" ? (
+                    <span>
+                        <strong>Full Name:</strong> {currentUser.displayName}
+                        <br />
+                        <strong>Email:</strong> {currentUser.email}
+                        <br />
+                        <strong>Email Verified:</strong> {JSON.stringify(currentUser.emailVerified)}
+                        <br />
+                        {Register?.country ? (
+                            <>
+                                <strong>Country:</strong> {Register.country}
+                                <br />
+                                <strong>State:</strong> {Register.state}
+                                <br />
+                            </>
+                        ) : null}
+                    </span>
+                ) : (
+                    <>
+                        {Register?.subscribePlan === "Premium" ? (
+                            <div>
+                                <div className="master_admins">
+                                    <h3>Master Admins</h3>
+                                    <hr />
+                                </div>
+                                <div className="d-flex justify-content-center">
+                                    {Premium_plans_data?.map((premium, index) => (
+                                        <Accounts name={premium.name} type="masteradmin" key={index} />
+                                    ))}
+                                </div>
+                            </div>
+                        ) : null}
+                        {Register?.subscribePlan === "Premium" ? (
+                            <div>
+                                <div className="managers">
+                                    <h3>Managers</h3>
+                                    <hr />
+                                </div>
+                                <div className="d-flex justify-content-center">
+                                    <div
+                                        className="border rounded-4 d-flex justify-content-center align-items-center mx-2"
+                                        style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
+                                        onClick={() => setManager_select("All")}
+                                    >
+                                        <span>All</span>
+                                    </div>
+                                    {Premium_plans_data?.map((premium, index) =>
+                                        premium.managers.map((manager, i) => (
+                                            <Accounts
+                                                id={manager.id}
+                                                name={manager.name}
+                                                key={i}
+                                                type="manager"
+                                                bgcolor={manager.bgcolor}
+                                                setManager_select={setManager_select}
+                                            />
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        ) : (
+                            <div>
+                                <div className="managers">
+                                    <h3>Managers</h3>
+                                    <hr />
+                                </div>
+                                <div className="d-flex justify-content-center">
+                                    <div
+                                        className="border rounded-4 d-flex justify-content-center align-items-center mx-2"
+                                        style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
+                                        onClick={() => setManager_select("All")}
+                                    >
+                                        <span>All</span>
+                                    </div>
+                                    {Standard_plans_data?.map((standard, index) => (
+                                        <Accounts
+                                            id={standard.id}
+                                            name={standard.name}
+                                            key={index}
+                                            type="manager"
+                                            bgcolor={standard.bgcolor}
+                                            setManager_select={setManager_select}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                        {Register?.subscribePlan === "Premium" ? (
+                            <div>
+                                <div className="employees">
+                                    <h3>Employees</h3>
+                                    <hr />
+                                </div>
+                                <div className="d-flex justify-content-center">
+                                    {Premium_plans_data?.map((premium, index) =>
+                                        premium.managers.map((manager, i) =>
+                                            manager_select === "All"
+                                                ? manager.employees.map((employee, n) => (
+                                                      <Accounts name={employee.name} key={n} bgcolor={manager.bgcolor} type="employee" />
+                                                  ))
+                                                : manager_select === manager.id
+                                                ? manager.employees.map((employee, n) => (
+                                                      <Accounts name={employee.name} key={n} bgcolor={manager.bgcolor} type="employee" />
+                                                  ))
+                                                : null
+                                        )
+                                    )}
+                                </div>
+                            </div>
+                        ) : (
+                            <div>
+                                <div className="employees">
+                                    <h3>Employees</h3>
+                                    <hr />
+                                </div>
+                                <div className="d-flex justify-content-center">
+                                    {Standard_plans_data?.map((standard, index) =>
+                                        manager_select === "All"
+                                            ? standard.employees.map((employee, n) => (
+                                                  <Accounts name={employee.name} bgcolor={standard.bgcolor} key={n} type="employee" />
+                                              ))
+                                            : manager_select === standard.id
+                                            ? standard.employees.map((employee, n) => (
+                                                  <Accounts name={employee.name} bgcolor={standard.bgcolor} key={n} type="employee" />
+                                              ))
+                                            : null
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
         </div>
     );
