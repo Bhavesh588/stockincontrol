@@ -1,6 +1,24 @@
 .accounts {
+    position: relative;
     transition: 0.3s ease-in-out;
+    color: white;
+    // overflow: hidden;
+
+    .hover-details {
+        position: absolute;
+        opacity: 0;
+        transition: 0.3s ease-in-out;
+
+        .btn {
+            background-color: rgb(33,37,41);
+        }
+    }
+
     &:hover {
         transform: scale(1.1);
+
+        .hover-details {
+            opacity: 1;
+        }
     }
 }

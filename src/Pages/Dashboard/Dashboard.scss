@@ -1,15 +1,16 @@
 .dashboard {
-    color: white;
+    // color: white;
+    height: 100%;
 
     .back_img_container {
         position: absolute;
         z-index: -1;
         width: 100%;
-        height: 100vh;
+        height: 100%;
 
         .img_style {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             object-fit: cover;
         }
     }
@@ -92,5 +93,15 @@
             width: 100%;
             max-width: 300px;
         }
+    }
+
+    .all_grids {
+        padding: 20px;
+        width: 100%;
+        display: inline-grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        grid-template-rows: repeat(auto-fill, minmax(220px, 1fr));
+        justify-items: center;
+        align-items: center;
     }
 }

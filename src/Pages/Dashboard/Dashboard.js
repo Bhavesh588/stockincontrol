@@ -98,7 +98,7 @@ function Dashboard({ login_txt, ...props }) {
     return (
         <div className="dashboard">
             <div className="back_img_container">
-                <img src={require("../../assets/dyed fabric backdrop.jpg")} alt="back_img" className="img_style" />
+                {/* <img src={require("../../assets/dyed fabric backdrop.jpg")} alt="back_img" className="img_style" /> */}
             </div>
             <button type="button" className="btn btn-primary d-none" id="btn_modal" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Launch demo modal
@@ -263,7 +263,7 @@ function Dashboard({ login_txt, ...props }) {
                                 </div>
                                 <div className="d-flex justify-content-center">
                                     {Premium_plans_data?.map((premium, index) => (
-                                        <Accounts name={premium.name} type="masteradmin" key={index} />
+                                        <Accounts name={premium.name} type="masteradmin" key={index} login_txt={login_txt} />
                                     ))}
                                 </div>
                             </div>
@@ -329,7 +329,7 @@ function Dashboard({ login_txt, ...props }) {
                                     <h3>Employees</h3>
                                     <hr />
                                 </div>
-                                <div className="d-flex justify-content-center">
+                                <div className="all_grids">
                                     {Premium_plans_data?.map((premium, index) =>
                                         premium.managers.map((manager, i) =>
                                             manager_select === "All"
