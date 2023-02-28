@@ -104,4 +104,10 @@
         justify-items: center;
         align-items: center;
     }
+
+    .btn-add {
+        border: 1px;
+        background-color: rgba($color: #000000, $alpha: 0.1);
+        border-style:dashed;
+    }
 }

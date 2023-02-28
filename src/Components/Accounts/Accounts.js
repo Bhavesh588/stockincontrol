@@ -2,7 +2,7 @@ import React from "react";
 
 import "./Accounts.scss";
 
-function Accounts({ id, name, type, bgcolor, setManager_select, login_txt }) {
+function Accounts({ id, name, type, bgcolor, setManager_select, login_txt, setLogSign }) {
     return (
         <div
             className={`accounts ${
@@ -48,6 +48,9 @@ function Accounts({ id, name, type, bgcolor, setManager_select, login_txt }) {
                     <button
                         type="submit"
                         className="btn w-100"
+                        onClick={() => setLogSign("Login")}
+                        data-bs-toggle="modal"
+                        data-bs-target="#loginsignupmodal"
                         style={{
                             color: `white`,
                             borderColor: `white`,

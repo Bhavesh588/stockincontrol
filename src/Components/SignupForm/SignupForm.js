@@ -5,7 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import "./SignupForm.scss";
 import { countries_data } from "../../Data/Countries_data";
 
-function SignupForm({ login_txt, setMessage, setAccount }) {
+function SignupForm({ login_txt, setMessage, setAccount, type }) {
     const { err, signup } = useAuth();
     const [main_err, setMain_err] = useState("");
     const [loading, setLoading] = useState(false);
@@ -57,7 +57,7 @@ function SignupForm({ login_txt, setMessage, setAccount }) {
             <Formik initialValues={initialValues} onSubmit={onSubmit} validate={validate} enableReinitialize={true}>
                 {(props) => (
                     <Form className="w-100 d-flex flex-column justify-content-center align-items-center">
-                        <h2>Sign Up</h2>
+                        {type !== "loginsignup" ? <h2>Sign Up</h2> : null}
                         <div className="inputbox d-flex flex-column">
                             {main_err === "" ? null : (
                                 <div className="bg-danger p-1 text-center text-light">
@@ -163,20 +163,33 @@ function SignupForm({ login_txt, setMessage, setAccount }) {
                         >
                             Signup
                         </button>
+                        {type === "loginsignup" ? (
+                            <button
+                                type="button"
+                                className="m-0 mb-2 login_btn"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                                onClick={() => props.resetForm()}
+                            >
+                                <span aria-hidden="true">Close</span>
+                            </button>
+                        ) : null}
                     </Form>
                 )}
             </Formik>
-            <div className="not_account">
-                <span>Already have an account?</span>
-                <button
-                    onClick={() => setAccount("login")}
-                    style={{
-                        color: `${login_txt}`,
-                    }}
-                >
-                    Login
-                </button>
-            </div>
+            {type !== "loginsignup" ? (
+                <div className="not_account">
+                    <span>Already have an account?</span>
+                    <button
+                        onClick={() => setAccount("login")}
+                        style={{
+                            color: `${login_txt}`,
+                        }}
+                    >
+                        Login
+                    </button>
+                </div>
+            ) : null}
         </div>
     );
 }

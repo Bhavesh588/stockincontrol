@@ -28,7 +28,7 @@ function App() {
                     <Route exact path="/" element={<PrivateRoute />}>
                         <Route exact path="/" element={
                                 <Suspense fallback={<div className="load"><div style={{ width: "100px" }}><img src={loader} alt="loader" style={{ width: "100%" }}/></div></div>}>
-                                    <Dashboard login_txt={login_txt} />
+                                    <Dashboard login_txt={login_txt} login_box={login_box} message={message} setMessage={setMessage} account={account} setAccount={setAccount} />
                                 </Suspense>
                             }
                         />

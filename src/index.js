@@ -8,7 +8,7 @@ import "bootstrap/dist/js/bootstrap";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
-import { faPaperPlane, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faPaperPlane, faXmark, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import { applyMiddleware, createStore } from "redux";
@@ -17,7 +17,7 @@ import { Provider } from "react-redux";
 import rootReducer from "./Redux/rootReducer";
 import thunk from "redux-thunk";
 
-library.add(fab, faPaperPlane, faXmark);
+library.add(fab, faPaperPlane, faXmark, faPlus);
 
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 

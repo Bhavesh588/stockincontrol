@@ -12,12 +12,15 @@ import { connect } from "react-redux";
 import Accounts from "../../Components/Accounts/Accounts";
 import { Premium_plans_data } from "../../Data/Premium_plans_data";
 import { Standard_plans_data } from "../../Data/Standard_plans_data";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import LoginSignupModal from "../../Components/LoginSignupModal/LoginSignupModal";
 
-function Dashboard({ login_txt, ...props }) {
+function Dashboard({ login_txt, login_box, message, setMessage, account, setAccount, ...props }) {
     const { Register, updateRegister } = props;
 
     const [logout_err, setLogout_err] = useState("");
     const [bol_logout, setBol_logout] = useState(false);
+    const [logsign, setLogSign] = useState("login");
 
     const [manager_select, setManager_select] = useState("All");
     const { currentUser, logout } = useAuth();
@@ -103,6 +106,15 @@ function Dashboard({ login_txt, ...props }) {
             <button type="button" className="btn btn-primary d-none" id="btn_modal" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 Launch demo modal
             </button>
+            <LoginSignupModal
+                login_txt={login_txt}
+                type={logsign}
+                message={message}
+                setMessage={setMessage}
+                setAccount={setAccount}
+                login_box={login_box}
+                account={account}
+            />
             <div
                 className="modal fade"
                 tabIndex="-1"
@@ -263,7 +275,7 @@ function Dashboard({ login_txt, ...props }) {
                                 </div>
                                 <div className="d-flex justify-content-center">
                                     {Premium_plans_data?.map((premium, index) => (
-                                        <Accounts name={premium.name} type="masteradmin" key={index} login_txt={login_txt} />
+                                        <Accounts name={premium.name} type="masteradmin" key={index} login_txt={login_txt} setLogSign={setLogSign} />
                                     ))}
                                 </div>
                             </div>
@@ -276,7 +288,7 @@ function Dashboard({ login_txt, ...props }) {
                                 </div>
                                 <div className="d-flex justify-content-center">
                                     <div
-                                        className="border rounded-4 d-flex justify-content-center align-items-center mx-2"
+                                        className="border border-dark rounded-4 d-flex justify-content-center align-items-center mx-2"
                                         style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
                                         onClick={() => setManager_select("All")}
                                     >
@@ -291,9 +303,21 @@ function Dashboard({ login_txt, ...props }) {
                                                 type="manager"
                                                 bgcolor={manager.bgcolor}
                                                 setManager_select={setManager_select}
+                                                setLogSign={setLogSign}
                                             />
                                         ))
                                     )}
+                                    <div
+                                        className="btn-add rounded-4 d-flex justify-content-center align-items-center mx-2"
+                                        style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
+                                        onClick={() => setLogSign("Signup")}
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#loginsignupmodal"
+                                    >
+                                        <span>
+                                            <FontAwesomeIcon icon="plus" />
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         ) : (
@@ -318,8 +342,20 @@ function Dashboard({ login_txt, ...props }) {
                                             type="manager"
                                             bgcolor={standard.bgcolor}
                                             setManager_select={setManager_select}
+                                            setLogSign={setLogSign}
                                         />
                                     ))}
+                                    <div
+                                        className="btn-add rounded-4 d-flex justify-content-center align-items-center mx-2"
+                                        style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
+                                        onClick={() => setLogSign("Signup")}
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#loginsignupmodal"
+                                    >
+                                        <span>
+                                            <FontAwesomeIcon icon="plus" />
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         )}
@@ -334,15 +370,36 @@ function Dashboard({ login_txt, ...props }) {
                                         premium.managers.map((manager, i) =>
                                             manager_select === "All"
                                                 ? manager.employees.map((employee, n) => (
-                                                      <Accounts name={employee.name} key={n} bgcolor={manager.bgcolor} type="employee" />
+                                                      <Accounts
+                                                          name={employee.name}
+                                                          key={n}
+                                                          bgcolor={manager.bgcolor}
+                                                          type="employee"
+                                                          setLogSign={setLogSign}
+                                                      />
                                                   ))
                                                 : manager_select === manager.id
                                                 ? manager.employees.map((employee, n) => (
-                                                      <Accounts name={employee.name} key={n} bgcolor={manager.bgcolor} type="employee" />
+                                                      <Accounts
+                                                          name={employee.name}
+                                                          key={n}
+                                                          bgcolor={manager.bgcolor}
+                                                          type="employee"
+                                                          setLogSign={setLogSign}
+                                                      />
                                                   ))
                                                 : null
                                         )
                                     )}
+                                    <div
+                                        className="btn-add rounded-4 d-flex justify-content-center align-items-center mx-2"
+                                        style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
+                                        onClick={() => setLogSign("Signup")}
+                                    >
+                                        <span>
+                                            <FontAwesomeIcon icon="plus" />
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         ) : (

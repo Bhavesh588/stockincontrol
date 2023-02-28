@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "./LoginForm.scss";
 import { useAuth } from "../../contexts/AuthContext";
 
-function LoginForm({ login_txt, login_box, message, setAccount }) {
+function LoginForm({ login_txt, login_box, message, setAccount, type }) {
     const { err, login, googleLogin } = useAuth();
     const [loading, setLoading] = useState(false);
     const [main_err, setMain_err] = useState("");
@@ -85,7 +85,7 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
             <Formik initialValues={initialValues} onSubmit={onSubmit} validate={validate} enableReinitialize={true}>
                 {(props) => (
                     <Form className="w-100 d-flex flex-column justify-content-center align-items-center">
-                        <h2>Login</h2>
+                        {type !== "loginsignup" ? <h2>Login</h2> : null}
                         <div className="inputbox d-flex flex-column">
                             {err === "" ? null : (
                                 <div className="bg-danger p-1 text-center text-light">
@@ -150,17 +150,19 @@ function LoginForm({ login_txt, login_box, message, setAccount }) {
                     </Form>
                 )}
             </Formik>
-            <div className="not_account">
-                <span>Don't have an account?</span>
-                <button
-                    onClick={() => setAccount("signup")}
-                    style={{
-                        color: `${login_txt}`,
-                    }}
-                >
-                    Create Account
-                </button>
-            </div>
+            {type !== "loginsignup" ? (
+                <div className="not_account">
+                    <span>Don't have an account?</span>
+                    <button
+                        onClick={() => setAccount("signup")}
+                        style={{
+                            color: `${login_txt}`,
+                        }}
+                    >
+                        Create Account
+                    </button>
+                </div>
+            ) : null}
             <div className="w-100 d-flex flex-column justify-content-center align-items-center">
                 <hr
                     style={{
