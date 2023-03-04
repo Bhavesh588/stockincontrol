@@ -4,8 +4,10 @@ import { useAuth } from "../../contexts/AuthContext";
 
 import "./SignupForm.scss";
 import { countries_data } from "../../Data/Countries_data";
+import { connect } from "react-redux";
 
-function SignupForm({ login_txt, setMessage, setAccount, type }) {
+function SignupForm({ login_txt, setMessage, setAccount, login_type, type, ...props }) {
+    const { all_data } = props;
     const { err, signup } = useAuth();
     const [main_err, setMain_err] = useState("");
     const [loading, setLoading] = useState(false);
@@ -14,11 +16,12 @@ function SignupForm({ login_txt, setMessage, setAccount, type }) {
         const errors = {};
 
         var mailFormat = /\S+@\S+\.\S+/;
+        if (!values.manager) errors.manager = "Required";
         if (!values.fullName) errors.fullName = "Required";
-        if (!values.email.match(mailFormat)) errors.email = "Invalid Email address!";
-        if (!values.email) errors.email = "Required";
-        if (!values.password) errors.password = "Required";
-        if (values.password !== values.confirmPassword) errors.confirmPassword = "Password does not match";
+        if (!values.Email.match(mailFormat)) errors.Email = "Invalid Email address!";
+        if (!values.Email) errors.Email = "Required";
+        if (!values.Password) errors.Password = "Required";
+        if (values.Password !== values.confirmPassword) errors.confirmPassword = "Password does not match";
         if (!values.confirmPassword) errors.confirmPassword = "Required";
         if (!values.country) errors.country = "Required";
         if (!values.state) errors.state = "Required";
@@ -27,9 +30,10 @@ function SignupForm({ login_txt, setMessage, setAccount, type }) {
     };
 
     const initialValues = {
+        manager: "",
         fullName: "",
-        email: "",
-        password: "",
+        Email: "",
+        Password: "",
         country: "",
         state: "",
         confirmPassword: "",
@@ -40,13 +44,16 @@ function SignupForm({ login_txt, setMessage, setAccount, type }) {
         try {
             setMain_err("");
             setLoading(true);
-            await signup(values.email, values.password, values);
-            if (err !== "") {
-                resetForm();
+            await signup(values.Email, values.Password, values, login_type, type);
+            resetForm();
+            if (err === "" && type !== "loginsignup") {
                 setAccount("login");
                 setMessage("Verify your Email");
+            } else {
+                document.getElementById("logsignclose").click();
             }
         } catch (error) {
+            console.log(error);
             setMain_err("Failed to create your account");
         }
         setLoading(false);
@@ -69,6 +76,30 @@ function SignupForm({ login_txt, setMessage, setAccount, type }) {
                                     <strong>{err}</strong>
                                 </div>
                             )}
+                            {type === "loginsignup" && login_type === "Store" ? (
+                                <>
+                                    <select
+                                        name="manager"
+                                        // defaultValue={props.values.country}
+                                        value={props.values.manager}
+                                        onChange={props.handleChange}
+                                        className="input_text"
+                                        style={{
+                                            color: `${login_txt}`,
+                                            borderColor: `${login_txt}`,
+                                            display: "block",
+                                        }}
+                                    >
+                                        <option value="" label="Select Manager" disabled />
+                                        {all_data?.map((manager, i) => (
+                                            <option value={manager.Deposito_id} label={manager.nombre} key={i} />
+                                        ))}
+                                    </select>
+                                    {props.errors.manager && props.touched.manager ? (
+                                        <span className="text-danger">{props.errors.manager}</span>
+                                    ) : null}
+                                </>
+                            ) : null}
                             <Field
                                 type="text"
                                 placeholder="Full Name"
@@ -83,25 +114,25 @@ function SignupForm({ login_txt, setMessage, setAccount, type }) {
                             <Field
                                 type="email"
                                 placeholder="Email"
-                                name="email"
+                                name="Email"
                                 className="input_text"
                                 style={{
                                     color: `${login_txt}`,
                                     borderColor: `${login_txt}`,
                                 }}
                             />
-                            {props.errors.email && props.touched.email ? <span className="text-danger">{props.errors.email}</span> : null}
+                            {props.errors.Email && props.touched.Email ? <span className="text-danger">{props.errors.Email}</span> : null}
                             <Field
                                 type="password"
                                 placeholder="Password"
-                                name="password"
+                                name="Password"
                                 className="input_text"
                                 style={{
                                     color: `${login_txt}`,
                                     borderColor: `${login_txt}`,
                                 }}
                             />
-                            {props.errors.password && props.touched.password ? <span className="text-danger">{props.errors.password}</span> : null}
+                            {props.errors.Password && props.touched.Password ? <span className="text-danger">{props.errors.Password}</span> : null}
                             <Field
                                 type="password"
                                 placeholder="Confirm Password"
@@ -117,7 +148,8 @@ function SignupForm({ login_txt, setMessage, setAccount, type }) {
                             ) : null}
                             <select
                                 name="country"
-                                defaultValue={props.values.country}
+                                // defaultValue={props.values.country}
+                                value={props.values.country}
                                 onChange={props.handleChange}
                                 className="input_text"
                                 style={{
@@ -134,7 +166,8 @@ function SignupForm({ login_txt, setMessage, setAccount, type }) {
                             {props.errors.country && props.touched.country ? <span className="text-danger">{props.errors.country}</span> : null}
                             <select
                                 name="state"
-                                defaultValue={props.values.state}
+                                // defaultValue={props.values.state}
+                                value={props.values.state}
                                 onChange={props.handleChange}
                                 className="input_text"
                                 style={{
@@ -194,4 +227,9 @@ function SignupForm({ login_txt, setMessage, setAccount, type }) {
     );
 }
 
-export default SignupForm;
+const mapStateToProps = (state) => {
+    return {
+        all_data: state.all_data,
+    };
+};
+export default connect(mapStateToProps)(SignupForm);

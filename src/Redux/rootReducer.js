@@ -1,5 +1,6 @@
 const initialState = {
     Register: null,
+    all_data: [],
     Products: [],
     CategoryAdd: [],
     Deposito: [],
@@ -20,6 +21,18 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 Register: action.item,
+            };
+
+        case "ALLDATA":
+            if (Array.isArray(action.item)) {
+                return {
+                    ...state,
+                    all_data: action.item,
+                };
+            }
+            return {
+                ...state,
+                all_data: [...state.all_data, action.item],
             };
 
         case "PRODUCTS":

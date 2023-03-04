@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 import "./ForgotPasswordForm.scss";
 
-function ForgotPasswordForm({ login_txt, setMessage, setAccount }) {
+function ForgotPasswordForm({ login_txt, login_email, setMessage, setAccount, type }) {
     const { resetPassword } = useAuth();
     const [loading, setLoading] = useState(false);
     const [main_err, setMain_err] = useState("");
@@ -13,8 +13,7 @@ function ForgotPasswordForm({ login_txt, setMessage, setAccount }) {
         const errors = {};
 
         var mailFormat = /\S+@\S+\.\S+/;
-        if (!values.email.match(mailFormat))
-            errors.email = "Invalid Email address!";
+        if (!values.email.match(mailFormat)) errors.email = "Invalid Email address!";
         if (!values.email) errors.email = "Required";
 
         return errors;
@@ -42,12 +41,7 @@ function ForgotPasswordForm({ login_txt, setMessage, setAccount }) {
 
     return (
         <div className="forgotpasswordform w-100 d-flex flex-column justify-content-center align-items-center">
-            <Formik
-                initialValues={initialValues}
-                onSubmit={onSubmit}
-                validate={validate}
-                enableReinitialize={true}
-            >
+            <Formik initialValues={initialValues} onSubmit={onSubmit} validate={validate} enableReinitialize={true}>
                 {(props) => (
                     <Form className="w-100 d-flex flex-column justify-content-center align-items-center">
                         <h2>Send Email</h2>
@@ -57,21 +51,26 @@ function ForgotPasswordForm({ login_txt, setMessage, setAccount }) {
                                     <strong>{main_err}</strong>
                                 </div>
                             )}
-                            <Field
-                                type="email"
-                                name="email"
-                                placeholder="Email"
-                                className="input_text"
-                                style={{
-                                    color: `${login_txt}`,
-                                    borderColor: `${login_txt}`,
-                                }}
-                            />
-                            {props.errors.email && props.touched.email ? (
-                                <span className="text-danger">
-                                    {props.errors.email}
-                                </span>
-                            ) : null}
+                            {type !== "loginsignup" ? (
+                                <>
+                                    <Field
+                                        type="email"
+                                        name="email"
+                                        placeholder="Email"
+                                        className="input_text"
+                                        style={{
+                                            color: `${login_txt}`,
+                                            borderColor: `${login_txt}`,
+                                        }}
+                                    />
+                                    {props.errors.email && props.touched.email ? <span className="text-danger">{props.errors.email}</span> : null}
+                                </>
+                            ) : (
+                                <div className="py-2">
+                                    <span style={{ fontWeight: "600" }}>Email: </span>
+                                    <span>{login_email}</span>
+                                </div>
+                            )}
                         </div>
                         <button
                             type="submit"

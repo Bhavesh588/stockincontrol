@@ -2,7 +2,7 @@ import React from "react";
 
 import "./Accounts.scss";
 
-function Accounts({ id, name, type, bgcolor, setManager_select, login_txt, setLogSign }) {
+function Accounts({ id, name, type, email, bgcolor, setLoginemail, setManager_select, login_txt, setLogSign }) {
     return (
         <div
             className={`accounts ${
@@ -10,10 +10,10 @@ function Accounts({ id, name, type, bgcolor, setManager_select, login_txt, setLo
             } rounded-4 d-flex justify-content-center align-items-center mx-2`}
             style={
                 type === "manager" || type === "employee"
-                    ? { backgroundColor: bgcolor, cursor: "pointer", width: "200px", height: "200px", fontWeight: "600" }
+                    ? { backgroundColor: `#${bgcolor}`, cursor: "pointer", width: "200px", height: "200px", fontWeight: "600" }
                     : { width: "200px", height: "200px", fontWeight: "600" }
             }
-            onClick={() => (type === "manager" || type === "employee" ? setManager_select(id) : null)}
+            onClick={() => (type === "manager" ? setManager_select(id) : null)}
         >
             <div className="hover-details rounded-4 bg-success w-100 h-100 d-flex flex-column justify-content-between">
                 <div className="container-fluid p-0">
@@ -48,7 +48,10 @@ function Accounts({ id, name, type, bgcolor, setManager_select, login_txt, setLo
                     <button
                         type="submit"
                         className="btn w-100"
-                        onClick={() => setLogSign("Login")}
+                        onClick={() => {
+                            setLogSign("Login");
+                            setLoginemail(email);
+                        }}
                         data-bs-toggle="modal"
                         data-bs-target="#loginsignupmodal"
                         style={{

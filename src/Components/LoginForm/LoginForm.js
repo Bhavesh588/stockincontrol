@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "./LoginForm.scss";
 import { useAuth } from "../../contexts/AuthContext";
 
-function LoginForm({ login_txt, login_box, message, setAccount, type }) {
+function LoginForm({ login_txt, login_box, message, setAccount, login_email, type }) {
     const { err, login, googleLogin } = useAuth();
     const [loading, setLoading] = useState(false);
     const [main_err, setMain_err] = useState("");
@@ -102,17 +102,26 @@ function LoginForm({ login_txt, login_box, message, setAccount, type }) {
                                     <strong>{message}</strong>
                                 </div>
                             )}
-                            <Field
-                                type="email"
-                                name="email"
-                                placeholder="Email"
-                                className="input_text"
-                                style={{
-                                    color: `${login_txt}`,
-                                    borderColor: `${login_txt}`,
-                                }}
-                            />
-                            {props.errors.email && props.touched.email ? <span className="text-danger">{props.errors.email}</span> : null}
+                            {type !== "loginsignup" ? (
+                                <>
+                                    <Field
+                                        type="email"
+                                        name="email"
+                                        placeholder="Email"
+                                        className="input_text"
+                                        style={{
+                                            color: `${login_txt}`,
+                                            borderColor: `${login_txt}`,
+                                        }}
+                                    />
+                                    {props.errors.email && props.touched.email ? <span className="text-danger">{props.errors.email}</span> : null}
+                                </>
+                            ) : (
+                                <div className="py-2">
+                                    <span style={{ fontWeight: "600" }}>Email: </span>
+                                    <span>{login_email}</span>
+                                </div>
+                            )}
                             <Field
                                 type="password"
                                 name="password"
@@ -163,21 +172,23 @@ function LoginForm({ login_txt, login_box, message, setAccount, type }) {
                     </button>
                 </div>
             ) : null}
-            <div className="w-100 d-flex flex-column justify-content-center align-items-center">
-                <hr
-                    style={{
-                        backgroundColor: `${login_txt}`,
-                    }}
-                />
-                <div
-                    className="or_text"
-                    style={{
-                        backgroundColor: `${login_box}`,
-                    }}
-                >
-                    OR
+            {type !== "loginsignup" ? (
+                <div className="w-100 d-flex flex-column justify-content-center align-items-center">
+                    <hr
+                        style={{
+                            backgroundColor: `${login_txt}`,
+                        }}
+                    />
+                    <div
+                        className="or_text"
+                        style={{
+                            backgroundColor: `${login_box}`,
+                        }}
+                    >
+                        OR
+                    </div>
                 </div>
-            </div>
+            ) : null}
             {/* <div
                 className="btn-all facebook-btn d-flex align-items-center"
                 onClick={loginWithFacebook}
@@ -190,10 +201,12 @@ function LoginForm({ login_txt, login_box, message, setAccount, type }) {
                     Login with Facebook
                 </span>
             </div> */}
-            <div className="btn-all google-btn d-flex align-items-center" onClick={loginWithGoogle}>
-                <FontAwesomeIcon icon="fa-brands fa-google" className="mx-2" />
-                <span className="w-100 d-flex justify-content-center">Login with Google</span>
-            </div>
+            {type !== "loginsignup" ? (
+                <div className="btn-all google-btn d-flex align-items-center" onClick={loginWithGoogle}>
+                    <FontAwesomeIcon icon="fa-brands fa-google" className="mx-2" />
+                    <span className="w-100 d-flex justify-content-center">Login with Google</span>
+                </div>
+            ) : null}
             {/* <div
                 className="btn-all twitter-btn d-flex align-items-center"
                 onClick={loginWithTwitter}

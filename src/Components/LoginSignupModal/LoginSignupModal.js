@@ -6,7 +6,7 @@ import "./LoginSignupModal.scss";
 import LoginForm from "../LoginForm/LoginForm";
 import ForgotPasswordForm from "../ForgotPasswordForm/ForgotPasswordForm";
 
-function LoginSignupModal({ login_txt, type, message, setMessage, account, setAccount, login_box }) {
+function LoginSignupModal({ login_txt, type, message, setMessage, account, setAccount, login_email, login_box, login_type }) {
     return (
         <>
             <div
@@ -23,18 +23,45 @@ function LoginSignupModal({ login_txt, type, message, setMessage, account, setAc
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title">{type}</h5>
-                            <button type="button" className="btn" data-bs-dismiss="modal" aria-label="Close" onClick={() => setAccount("login")}>
+                            <button
+                                type="button"
+                                id="logsignclose"
+                                className="btn"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                                onClick={() => setAccount("login")}
+                            >
                                 <span aria-hidden="true">
                                     <FontAwesomeIcon icon="xmark" />
                                 </span>
                             </button>
                         </div>
                         {type === "Signup" ? (
-                            <SignupForm login_txt={login_txt} setMessage={setMessage} setAccount={setAccount} type="loginsignup" />
+                            <SignupForm
+                                login_txt={login_txt}
+                                setMessage={setMessage}
+                                setAccount={setAccount}
+                                login_type={login_type}
+                                type="loginsignup"
+                            />
                         ) : account === "login" ? (
-                            <LoginForm login_txt={login_txt} login_box={login_box} message={message} setAccount={setAccount} type="loginsignup" />
+                            <LoginForm
+                                login_txt={login_txt}
+                                login_box={login_box}
+                                message={message}
+                                setAccount={setAccount}
+                                login_type={login_type}
+                                login_email={login_email}
+                                type="loginsignup"
+                            />
                         ) : (
-                            <ForgotPasswordForm login_txt={login_txt} setMessage={setMessage} setAccount={setAccount} />
+                            <ForgotPasswordForm
+                                login_txt={login_txt}
+                                setMessage={setMessage}
+                                login_email={login_email}
+                                setAccount={setAccount}
+                                type="loginsignup"
+                            />
                         )}
                     </div>
                 </div>

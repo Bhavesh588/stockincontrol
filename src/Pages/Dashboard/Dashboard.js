@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { Form, Formik } from "formik";
@@ -10,45 +10,58 @@ import "./Dashboard.scss";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { connect } from "react-redux";
 import Accounts from "../../Components/Accounts/Accounts";
-import { Premium_plans_data } from "../../Data/Premium_plans_data";
-import { Standard_plans_data } from "../../Data/Standard_plans_data";
+// import { Premium_plans_data } from "../../Data/Premium_plans_data";
+// import { Standard_plans_data } from "../../Data/Standard_plans_data";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LoginSignupModal from "../../Components/LoginSignupModal/LoginSignupModal";
+import { store_Register } from "../../Functions/AllFunctions";
 
 function Dashboard({ login_txt, login_box, message, setMessage, account, setAccount, ...props }) {
-    const { Register, updateRegister } = props;
+    const { Register, all_data, updateRegister, Status, updateAlldata } = props;
 
     const [logout_err, setLogout_err] = useState("");
     const [bol_logout, setBol_logout] = useState(false);
     const [logsign, setLogSign] = useState("login");
+    const [login_type, setLogintype] = useState("Master Manager");
+    const [login_email, setLoginemail] = useState("");
 
     const [manager_select, setManager_select] = useState("All");
     const { currentUser, logout } = useAuth();
 
+    const loop = useRef(true);
+
     useEffect(() => {
-        if (!bol_logout) {
-            if (Register === null) {
-                axios.get(`http://localhost:5000/register/${currentUser.uid}`).then((res) => updateRegister(res.data[0]));
+        async function register_data() {
+            if (!bol_logout) {
+                await store_Register("Dashboard", Status, Register, updateRegister, updateAlldata);
             } else {
-                if (Register.country === null) {
-                    if (document.getElementById("btn_modal")) {
-                        var btn = document.getElementById("btn_modal");
-                        btn.click();
-                    }
+                setBol_logout(true);
+            }
+        }
+        if (Register !== null) {
+            if (Register.country === null) {
+                if (document.getElementById("btn_modal")) {
+                    var btn = document.getElementById("btn_modal");
+                    btn.click();
                 }
             }
-        } else {
-            setBol_logout(true);
         }
-    }, [Register, updateRegister, currentUser, bol_logout]);
+        if (loop.current) {
+            register_data();
+            loop.current = false;
+        }
+    }, [Register, updateRegister, updateAlldata, bol_logout, Status]);
 
     const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
             setBol_logout(true);
+            setLogintype("Master Manager");
+            setLoginemail("");
             await updateRegister(null);
             await logout();
+            localStorage.removeItem("Register");
             navigate("/login");
         } catch (error) {
             setLogout_err("Failed to Logout");
@@ -78,7 +91,7 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
             setMain_err("");
             setLoading(true);
             await axios
-                .put("http://localhost:5000/register/edit", {
+                .put("http://localhost:5000/deposito/edit", {
                     id: currentUser.uid,
                     country: values.country,
                     state: values.state,
@@ -114,6 +127,8 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
                 setAccount={setAccount}
                 login_box={login_box}
                 account={account}
+                login_email={login_email}
+                login_type={login_type}
             />
             <div
                 className="modal fade"
@@ -274,9 +289,14 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
                                     <hr />
                                 </div>
                                 <div className="d-flex justify-content-center">
-                                    {Premium_plans_data?.map((premium, index) => (
-                                        <Accounts name={premium.name} type="masteradmin" key={index} login_txt={login_txt} setLogSign={setLogSign} />
-                                    ))}
+                                    <Accounts
+                                        name={Register.nombre}
+                                        email={Register.Email}
+                                        type="masteradmin"
+                                        login_txt={login_txt}
+                                        setLoginemail={setLoginemail}
+                                        setLogSign={setLogSign}
+                                    />
                                 </div>
                             </div>
                         ) : null}
@@ -286,31 +306,36 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
                                     <h3>Managers</h3>
                                     <hr />
                                 </div>
-                                <div className="d-flex justify-content-center">
-                                    <div
-                                        className="border border-dark rounded-4 d-flex justify-content-center align-items-center mx-2"
-                                        style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
-                                        onClick={() => setManager_select("All")}
-                                    >
-                                        <span>All</span>
-                                    </div>
-                                    {Premium_plans_data?.map((premium, index) =>
-                                        premium.managers.map((manager, i) => (
-                                            <Accounts
-                                                id={manager.id}
-                                                name={manager.name}
-                                                key={i}
-                                                type="manager"
-                                                bgcolor={manager.bgcolor}
-                                                setManager_select={setManager_select}
-                                                setLogSign={setLogSign}
-                                            />
-                                        ))
-                                    )}
+                                <div className="all_grids">
+                                    {all_data?.length > 1 ? (
+                                        <div
+                                            className="border border-dark rounded-4 d-flex justify-content-center align-items-center mx-2"
+                                            style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
+                                            onClick={() => setManager_select("All")}
+                                        >
+                                            <span>All</span>
+                                        </div>
+                                    ) : null}
+                                    {all_data.map((manager, i) => (
+                                        <Accounts
+                                            id={manager.Deposito_id}
+                                            name={manager.nombre}
+                                            email={manager.Email}
+                                            key={i}
+                                            type="manager"
+                                            bgcolor={manager.bgcolor}
+                                            setLoginemail={setLoginemail}
+                                            setManager_select={setManager_select}
+                                            setLogSign={setLogSign}
+                                        />
+                                    ))}
                                     <div
                                         className="btn-add rounded-4 d-flex justify-content-center align-items-center mx-2"
                                         style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
-                                        onClick={() => setLogSign("Signup")}
+                                        onClick={() => {
+                                            setLogSign("Signup");
+                                            setLogintype("Manager");
+                                        }}
                                         data-bs-toggle="modal"
                                         data-bs-target="#loginsignupmodal"
                                     >
@@ -326,21 +351,25 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
                                     <h3>Managers</h3>
                                     <hr />
                                 </div>
-                                <div className="d-flex justify-content-center">
-                                    <div
-                                        className="border rounded-4 d-flex justify-content-center align-items-center mx-2"
-                                        style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
-                                        onClick={() => setManager_select("All")}
-                                    >
-                                        <span>All</span>
-                                    </div>
-                                    {Standard_plans_data?.map((standard, index) => (
+                                <div className="all_grids">
+                                    {all_data?.length > 1 ? (
+                                        <div
+                                            className="border border-dark rounded-4 d-flex justify-content-center align-items-center mx-2"
+                                            style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
+                                            onClick={() => setManager_select("All")}
+                                        >
+                                            <span>All</span>
+                                        </div>
+                                    ) : null}
+                                    {all_data.map((manager, i) => (
                                         <Accounts
-                                            id={standard.id}
-                                            name={standard.name}
-                                            key={index}
+                                            id={manager.Deposito_id}
+                                            name={manager.nombre}
+                                            email={manager.Email}
+                                            setLoginemail={setLoginemail}
+                                            key={i}
                                             type="manager"
-                                            bgcolor={standard.bgcolor}
+                                            bgcolor={manager.bgcolor}
                                             setManager_select={setManager_select}
                                             setLogSign={setLogSign}
                                         />
@@ -348,7 +377,10 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
                                     <div
                                         className="btn-add rounded-4 d-flex justify-content-center align-items-center mx-2"
                                         style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
-                                        onClick={() => setLogSign("Signup")}
+                                        onClick={() => {
+                                            setLogSign("Signup");
+                                            setLogintype("Manager");
+                                        }}
                                         data-bs-toggle="modal"
                                         data-bs-target="#loginsignupmodal"
                                     >
@@ -366,35 +398,42 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
                                     <hr />
                                 </div>
                                 <div className="all_grids">
-                                    {Premium_plans_data?.map((premium, index) =>
-                                        premium.managers.map((manager, i) =>
-                                            manager_select === "All"
-                                                ? manager.employees.map((employee, n) => (
-                                                      <Accounts
-                                                          name={employee.name}
-                                                          key={n}
-                                                          bgcolor={manager.bgcolor}
-                                                          type="employee"
-                                                          setLogSign={setLogSign}
-                                                      />
-                                                  ))
-                                                : manager_select === manager.id
-                                                ? manager.employees.map((employee, n) => (
-                                                      <Accounts
-                                                          name={employee.name}
-                                                          key={n}
-                                                          bgcolor={manager.bgcolor}
-                                                          type="employee"
-                                                          setLogSign={setLogSign}
-                                                      />
-                                                  ))
-                                                : null
-                                        )
+                                    {all_data?.map((manager, i) =>
+                                        manager_select === "All"
+                                            ? manager.employees.map((employee, n) => (
+                                                  <Accounts
+                                                      name={employee.nombre}
+                                                      email={employee.Email}
+                                                      setLoginemail={setLoginemail}
+                                                      key={n}
+                                                      bgcolor={manager.bgcolor}
+                                                      type="employee"
+                                                      setLogSign={setLogSign}
+                                                  />
+                                              ))
+                                            : manager_select === manager.Deposito_id
+                                            ? manager.employees.map((employee, n) => (
+                                                  <Accounts
+                                                      name={employee.nombre}
+                                                      email={employee.Email}
+                                                      setLoginemail={setLoginemail}
+                                                      key={n}
+                                                      bgcolor={manager.bgcolor}
+                                                      type="employee"
+                                                      setLogSign={setLogSign}
+                                                  />
+                                              ))
+                                            : null
                                     )}
                                     <div
                                         className="btn-add rounded-4 d-flex justify-content-center align-items-center mx-2"
                                         style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
-                                        onClick={() => setLogSign("Signup")}
+                                        onClick={() => {
+                                            setLogSign("Signup");
+                                            setLogintype("Store");
+                                        }}
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#loginsignupmodal"
                                     >
                                         <span>
                                             <FontAwesomeIcon icon="plus" />
@@ -408,8 +447,8 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
                                     <h3>Employees</h3>
                                     <hr />
                                 </div>
-                                <div className="d-flex justify-content-center">
-                                    {Standard_plans_data?.map((standard, index) =>
+                                <div className="all_grids">
+                                    {/* {Standard_plans_data?.map((standard, index) =>
                                         manager_select === "All"
                                             ? standard.employees.map((employee, n) => (
                                                   <Accounts name={employee.name} bgcolor={standard.bgcolor} key={n} type="employee" />
@@ -419,7 +458,48 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
                                                   <Accounts name={employee.name} bgcolor={standard.bgcolor} key={n} type="employee" />
                                               ))
                                             : null
+                                    )} */}
+                                    {all_data?.map((manager, i) =>
+                                        manager_select === "All"
+                                            ? manager.employees.map((employee, n) => (
+                                                  <Accounts
+                                                      name={employee.nombre}
+                                                      email={employee.Email}
+                                                      setLoginemail={setLoginemail}
+                                                      key={n}
+                                                      bgcolor={manager.bgcolor}
+                                                      type="employee"
+                                                      setLogSign={setLogSign}
+                                                  />
+                                              ))
+                                            : manager_select === manager.Deposito_id
+                                            ? manager.employees.map((employee, n) => (
+                                                  <Accounts
+                                                      name={employee.nombre}
+                                                      email={employee.Email}
+                                                      setLoginemail={setLoginemail}
+                                                      key={n}
+                                                      bgcolor={manager.bgcolor}
+                                                      type="employee"
+                                                      setLogSign={setLogSign}
+                                                  />
+                                              ))
+                                            : null
                                     )}
+                                    <div
+                                        className="btn-add rounded-4 d-flex justify-content-center align-items-center mx-2"
+                                        style={{ width: "200px", height: "200px", fontWeight: "600", cursor: "pointer" }}
+                                        onClick={() => {
+                                            setLogSign("Signup");
+                                            setLogintype("Store");
+                                        }}
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#loginsignupmodal"
+                                    >
+                                        <span>
+                                            <FontAwesomeIcon icon="plus" />
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         )}
@@ -433,6 +513,8 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
 const mapStateToProps = (state) => {
     return {
         Register: state.Register,
+        all_data: state.all_data,
+        Status: state.Status,
     };
 };
 
@@ -441,6 +523,12 @@ const mapDispatchToProps = (dispatch) => {
         updateRegister: (val) => {
             dispatch({
                 type: "REGISTER",
+                item: val,
+            });
+        },
+        updateAlldata: (val) => {
+            dispatch({
+                type: "ALLDATA",
                 item: val,
             });
         },
