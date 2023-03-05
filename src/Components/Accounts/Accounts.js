@@ -2,18 +2,18 @@ import React from "react";
 
 import "./Accounts.scss";
 
-function Accounts({ id, name, type, email, bgcolor, setLoginemail, setManager_select, login_txt, setLogSign }) {
+function Accounts({ id, name, type, email, bgcolor, setLoginemail, setManager_select, login_txt, setLogSign, setLogintype }) {
     return (
         <div
             className={`accounts ${
-                type === "manager" || type === "employee" ? "" : "bg-primary"
+                type === "Manager" || type === "Store" ? "" : "bg-primary"
             } rounded-4 d-flex justify-content-center align-items-center mx-2`}
             style={
-                type === "manager" || type === "employee"
+                type === "Manager" || type === "Store"
                     ? { backgroundColor: `#${bgcolor}`, cursor: "pointer", width: "200px", height: "200px", fontWeight: "600" }
                     : { width: "200px", height: "200px", fontWeight: "600" }
             }
-            onClick={() => (type === "manager" ? setManager_select(id) : null)}
+            onClick={() => (type === "Manager" ? setManager_select(id) : null)}
         >
             <div className="hover-details rounded-4 bg-success w-100 h-100 d-flex flex-column justify-content-between">
                 <div className="container-fluid p-0">
@@ -51,6 +51,7 @@ function Accounts({ id, name, type, email, bgcolor, setLoginemail, setManager_se
                         onClick={() => {
                             setLogSign("Login");
                             setLoginemail(email);
+                            setLogintype(type);
                         }}
                         data-bs-toggle="modal"
                         data-bs-target="#loginsignupmodal"

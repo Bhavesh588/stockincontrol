@@ -6,6 +6,8 @@ import "./App.scss";
 import loader from "./assets/Loader.gif";
 import PrivateRoute from "./Components/PrivateRoute/PrivateRoute";
 import { AuthProvider } from "./contexts/AuthContext";
+import Manager from "./Pages/Dashboard/Manager/Manager";
+import EmployeeOrder from "./Pages/EmployeeOrder/EmployeeOrder";
 
 const Login = lazy(() => import("./Pages/Login/Login"));
 const Dashboard = lazy(() => import("./Pages/Dashboard/Dashboard"));
@@ -31,6 +33,17 @@ function App() {
                                     <Dashboard login_txt={login_txt} login_box={login_box} message={message} setMessage={setMessage} account={account} setAccount={setAccount} />
                                 </Suspense>
                             }
+                        />
+                        <Route path="/employeeorder" element={
+                            <Suspense fallback={<div className="load"><div style={{ width: "100px" }}><img src={loader} alt="loader" style={{ width: "100%" }}/></div></div>}>
+                                <EmployeeOrder />
+                            </Suspense>
+                        } />
+                        <Route path="/manager" element={
+                                <Suspense fallback={<div className="load"><div style={{ width: "100px" }}><img src={loader} alt="loader" style={{ width: "100%" }}/></div></div>}>
+                                    <Manager />
+                                </Suspense>
+                            } 
                         />
                     </Route>
                     <Route exact path="/login" element={

@@ -322,11 +322,12 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
                                             name={manager.nombre}
                                             email={manager.Email}
                                             key={i}
-                                            type="manager"
+                                            type="Manager"
                                             bgcolor={manager.bgcolor}
                                             setLoginemail={setLoginemail}
                                             setManager_select={setManager_select}
                                             setLogSign={setLogSign}
+                                            setLogintype={setLogintype}
                                         />
                                     ))}
                                     <div
@@ -368,10 +369,11 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
                                             email={manager.Email}
                                             setLoginemail={setLoginemail}
                                             key={i}
-                                            type="manager"
+                                            type="Manager"
                                             bgcolor={manager.bgcolor}
                                             setManager_select={setManager_select}
                                             setLogSign={setLogSign}
+                                            setLogintype={setLogintype}
                                         />
                                     ))}
                                     <div
@@ -407,8 +409,9 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
                                                       setLoginemail={setLoginemail}
                                                       key={n}
                                                       bgcolor={manager.bgcolor}
-                                                      type="employee"
+                                                      type="Store"
                                                       setLogSign={setLogSign}
+                                                      setLogintype={setLogintype}
                                                   />
                                               ))
                                             : manager_select === manager.Deposito_id
@@ -419,8 +422,9 @@ function Dashboard({ login_txt, login_box, message, setMessage, account, setAcco
                                                       setLoginemail={setLoginemail}
                                                       key={n}
                                                       bgcolor={manager.bgcolor}
-                                                      type="employee"
+                                                      type="Store"
                                                       setLogSign={setLogSign}
+                                                      setLogintype={setLogintype}
                                                   />
                                               ))
                                             : null

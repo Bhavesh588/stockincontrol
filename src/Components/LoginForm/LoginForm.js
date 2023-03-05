@@ -5,8 +5,12 @@ import { useNavigate } from "react-router-dom";
 
 import "./LoginForm.scss";
 import { useAuth } from "../../contexts/AuthContext";
+import { connect } from "react-redux";
+import axios from "axios";
 
-function LoginForm({ login_txt, login_box, message, setAccount, login_email, type }) {
+function LoginForm({ login_txt, login_box, message, setAccount, login_type, login_email, type, ...props }) {
+    const { all_data } = props;
+
     const { err, login, googleLogin } = useAuth();
     const [loading, setLoading] = useState(false);
     const [main_err, setMain_err] = useState("");
@@ -25,7 +29,7 @@ function LoginForm({ login_txt, login_box, message, setAccount, login_email, typ
     };
 
     const initialValues = {
-        email: "",
+        email: type !== "loginsignup" ? "" : login_email,
         password: "",
     };
 
@@ -35,7 +39,61 @@ function LoginForm({ login_txt, login_box, message, setAccount, login_email, typ
             setLoading(true);
             await login(values.email, values.password);
             resetForm();
-            navigate("/");
+            if (type === "loginsignup") {
+                if (login_type === "Store") {
+                    for (var i = 0; i < all_data.length; i++) {
+                        for (var j = 0; j < all_data[i].employees.length; j++) {
+                            if (all_data[i].employees[j].Email === values.email) {
+                                if (all_data[i].employees[j].emailVerified === "1") {
+                                    document.getElementById("logsignclose").click();
+                                    navigate("/employeeorder");
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                } else if (login_type === "Manager") {
+                    if (all_data.find((ele) => ele.Email === values.email).emailVerified === "1") {
+                        document.getElementById("logsignclose").click();
+                        navigate("/manager");
+                    }
+                }
+            } else {
+                var data = {};
+                await axios.get(`http://localhost:5000/deposito`).then((alldep) => {
+                    data = alldep.data.find((ele) => ele.Email === values.email);
+                    localStorage.setItem("Register", data);
+                    // for (var i = 0; i < data.length; i++) {
+                    //     if (data[i])
+                    //     for (var j = 0; j < alldep.data.length; j++) {
+                    //         if (alldep.data[j].Deposito_id_fk === data[i].Deposito_id) {
+                    //             console.log(alldep.data[j]);
+                    //         }
+                    //     }
+                    // }
+                    // for (var i = 0; i < alldep.length; i++) {
+                    //     if (alldep[i].Email === values.email) {
+                    //         main_type = "Manager";
+                    //         return;
+                    //     } else {
+                    //         for (var j = 0; j < alldep[i].employees.length; j++) {
+                    //             if (alldep[i].employees[j].Email === values.email) {
+                    //                 main_type = "Store";
+                    //                 console.log(main_type);
+                    //                 return;
+                    //             }
+                    //         }
+                    //     }
+                    // }
+                });
+                if (data.Type === "Store") {
+                    navigate("/employeeorder");
+                } else if (data.Type === "Manager") {
+                    navigate("/manager");
+                } else {
+                    navigate("/");
+                }
+            }
         } catch (error) {
             setMain_err("Your Email / Password does not correct");
         }
@@ -220,4 +278,10 @@ function LoginForm({ login_txt, login_box, message, setAccount, login_email, typ
     );
 }
 
-export default LoginForm;
+const mapStateToProps = (state) => {
+    return {
+        all_data: state.all_data,
+    };
+};
+
+export default connect(mapStateToProps)(LoginForm);
